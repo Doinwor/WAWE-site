@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0b14"/>
+      <stop offset="100%" stop-color="#0b0b14"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="40%" stop-color="#a78bfa"/>
+      <stop offset="70%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="orb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" rx="32" fill="url(#bg)"/>
+
+  <!-- Glow -->
+  <circle cx="100" cy="90" r="100" fill="url(#orb)"/>
+
+  <!-- Waveform -->
+  <g transform="translate(24, 36)">
+    <rect x="0" y="46" width="8" height="28" rx="4" fill="url(#wave)" opacity="0.65"/>
+    <rect x="13" y="24" width="8" height="72" rx="4" fill="url(#wave)" opacity="0.8"/>
+    <rect x="26" y="36" width="8" height="48" rx="4" fill="url(#wave)" opacity="0.85"/>
+    <rect x="39" y="12" width="8" height="96" rx="4" fill="url(#wave)"/>
+    <rect x="52" y="28" width="8" height="64" rx="4" fill="url(#wave)" opacity="0.9"/>
+    <rect x="65" y="42" width="8" height="36" rx="4" fill="url(#wave)" opacity="0.7"/>
+    <rect x="78" y="18" width="8" height="84" rx="4" fill="url(#wave)" opacity="0.83"/>
+    <rect x="91" y="38" width="8" height="44" rx="4" fill="url(#wave)" opacity="0.72"/>
+    <rect x="104" y="16" width="8" height="88" rx="4" fill="url(#wave)" opacity="0.78"/>
+    <rect x="117" y="32" width="8" height="56" rx="4" fill="url(#wave)" opacity="0.82"/>
+    <rect x="130" y="10" width="8" height="100" rx="4" fill="url(#wave)" opacity="0.88"/>
+    <rect x="143" y="26" width="8" height="68" rx="4" fill="url(#wave)" opacity="0.75"/>
+    <rect x="156" y="40" width="8" height="40" rx="4" fill="url(#wave)" opacity="0.68"/>
+  </g>
+
+  <!-- Center highlight -->
+  <rect x="94" y="48" width="12" height="24" rx="6" fill="white" opacity="0.15"/>
+</svg>
