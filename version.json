@@ -1,5 +1,5 @@
 {
-  "version": "1.0.3",
-  "downloadUrl": "https://github.com/Doinwor/WAWE-site/releases/download/v1.0.3/wawe.exe",
-  "notes": "• Исправлено: скрытый запуск обновления (без командной строки)\n• Улучшен интерфейс: прогресс загрузки, экран успешного обновления, авто-перезагрузка"
+  "version": "1.0.4",
+  "downloadUrl": "https://github.com/Doinwor/WAWE-site/releases/download/v1.0.4/wawe.exe",
+  "notes": "• Демонстрация полного процесса обновления с прогресс-баром и авто-перезагрузкой"
 }
