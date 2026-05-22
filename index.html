@@ -1,720 +1,383 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WAWE — Музыкальный плеер. Слушай без границ.</title>
-  <meta name="description" content="WAWE — десктопный музыкальный плеер с импортом из Яндекс Музыки, радио «Моя волна» и поиском полных MP3-треков. Бесплатно и без ограничений.">
-  <meta name="keywords" content="WAWE, музыкальный плеер, Яндекс Музыка, десктопное приложение, музыка, плеер, my wave, hitmotop">
-  <meta name="theme-color" content="#0f0f1a">
-  <meta property="og:title" content="WAWE — Музыкальный плеер">
-  <meta property="og:description" content="Слушай музыку без границ. Импорт из Яндекс Музыки, радио «Моя волна», поиск полных MP3.">
-  <meta property="og:image" content="https://doinwor.github.io/WAWE-site/og.png">
-  <meta property="og:url" content="https://doinwor.github.io/WAWE-site/">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><text y='32' font-size='32'>🎵</text></svg>">
+  <title>WAWE вЂ” Yandex Music Client</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: #0b0b14;
-      color: #e4e4e7;
-      line-height: 1.6;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Animated background ── */
-    .bg-canvas {
+    /* Background effects */
+    .bg-glow {
       position: fixed;
       inset: 0;
-      z-index: 0;
+      z-index: -1;
       overflow: hidden;
-      pointer-events: none;
     }
-    .bg-canvas .orb {
+    .bg-glow::before {
+      content: '';
       position: absolute;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.4;
-      will-change: transform;
+      top: -20%;
+      left: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(139,92,246,0.15) 0%, transparent 60%);
+      animation: float 12s ease-in-out infinite;
     }
-    .bg-canvas .orb:nth-child(1) {
-      width: 600px; height: 600px;
-      background: #7c3aed;
-      top: -10%; left: -5%;
-      animation: float1 25s ease-in-out infinite;
+    .bg-glow::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      right: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(236,72,153,0.12) 0%, transparent 60%);
+      animation: float 12s ease-in-out infinite reverse;
     }
-    .bg-canvas .orb:nth-child(2) {
-      width: 500px; height: 500px;
-      background: #ec4899;
-      bottom: -15%; right: -5%;
-      animation: float2 30s ease-in-out infinite;
-    }
-    .bg-canvas .orb:nth-child(3) {
-      width: 400px; height: 400px;
-      background: #6366f1;
-      top: 40%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation: float3 20s ease-in-out infinite;
-      opacity: 0.2;
-    }
-    @keyframes float1 {
+    @keyframes float {
       0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(80px, -60px) scale(1.05); }
-      66% { transform: translate(-40px, 40px) scale(0.95); }
-    }
-    @keyframes float2 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(-60px, -40px) scale(1.08); }
-      66% { transform: translate(40px, 60px) scale(0.92); }
-    }
-    @keyframes float3 {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.2); }
-    }
-
-    /* ── Grid overlay ── */
-    .grid-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
     }
 
     .container {
-      max-width: 960px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 0 24px;
-      position: relative;
-      z-index: 1;
     }
-    @media (max-width: 480px) { .container { padding: 0 16px; } }
 
-    /* ── Typography ── */
-    h1, h2, h3 { font-weight: 700; line-height: 1.2; }
-    h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.03em; }
-    h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); letter-spacing: -0.02em; }
-    h3 { font-size: 1.15rem; }
-    p { color: #a1a1aa; font-size: 1rem; }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #a78bfa, #f472b6, #fb7185);
+    /* Nav */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #f472b6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+      -webkit-text-fill-color: white;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: #888;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #c084fc; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.2);
+      color: #a78bfa;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    /* ── Reveal animations ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-
-    /* ── Buttons ── */
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 14px 28px;
-      border-radius: 12px;
+      padding: 14px 32px;
+      border-radius: 50px;
       font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.25s;
       cursor: pointer;
       border: none;
-      text-decoration: none;
-      white-space: nowrap;
     }
     .btn-primary {
       background: linear-gradient(135deg, #7c3aed, #ec4899);
-      color: #fff;
-      box-shadow: 0 4px 24px rgba(124, 58, 237, 0.25);
+      color: white;
+      box-shadow: 0 8px 24px rgba(124,58,237,0.3);
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 40px rgba(124, 58, 237, 0.35);
+      box-shadow: 0 12px 32px rgba(124,58,237,0.4);
     }
     .btn-secondary {
       background: rgba(255,255,255,0.06);
-      color: #e4e4e7;
+      color: #ccc;
       border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(12px);
     }
     .btn-secondary:hover {
       background: rgba(255,255,255,0.1);
       transform: translateY(-2px);
     }
 
-    /* ── Navbar ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 16px 0;
-      transition: background 0.3s, backdrop-filter 0.3s;
-    }
-    nav.scrolled {
-      background: rgba(11, 11, 20, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    nav .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #fff;
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a {
-      color: #a1a1aa;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #e4e4e7; }
-    .nav-links .btn { padding: 8px 18px; font-size: 0.85rem; }
-    @media (max-width: 640px) {
-      .nav-links a:not(.btn) { display: none; }
-    }
-    @media (max-width: 480px) {
-      nav { padding: 12px 0; }
-      .nav-logo { font-size: 1.1rem; }
-      .nav-links .btn { padding: 6px 14px; font-size: 0.8rem; }
-    }
-
-    /* ── Hero ── */
-    .hero {
-      min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      padding: 120px 0 80px;
-      position: relative;
-    }
-    .hero .container {
+    /* Features */
+    .features {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 60px 0;
     }
-    @media (max-width: 768px) {
-      .hero .container { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-    }
-    @media (max-width: 480px) {
-      .hero { padding: 100px 0 60px; min-height: auto; }
-      .hero .container { gap: 24px; }
-      .hero h1 { font-size: clamp(2rem, 8vw, 2.5rem); }
-      .hero p { font-size: 0.95rem; margin-bottom: 24px; }
-      .hero-buttons { flex-direction: column; align-items: center; }
-      .hero-buttons .btn { width: 100%; max-width: 300px; justify-content: center; }
-      .hero-badge { font-size: 0.7rem; padding: 4px 10px; }
-      .hero-mockup { max-width: 100%; aspect-ratio: 4/3; }
-      .hero-mockup .screen-content { padding: 16px; }
-    }
-    .hero-content { max-width: 520px; }
-    @media (max-width: 768px) { .hero-content { max-width: 100%; } }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 100px;
-      background: rgba(124, 58, 237, 0.12);
-      border: 1px solid rgba(124, 58, 237, 0.2);
-      color: #a78bfa;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-    .hero-badge .dot {
-      width: 6px; height: 6px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .hero h1 { margin-bottom: 20px; }
-    .hero p { font-size: 1.1rem; margin-bottom: 32px; max-width: 440px; }
-    @media (max-width: 768px) { .hero p { max-width: 100%; } }
-    .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-    @media (max-width: 768px) { .hero-buttons { justify-content: center; } }
-
-    .hero-visual {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-mockup {
-      width: 100%;
-      max-width: 420px;
-      aspect-ratio: 4/3;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(236,72,153,0.08));
-      border: 1px solid rgba(255,255,255,0.06);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.3);
-    }
-    .hero-mockup .screen-content {
-      padding: 24px;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .hero-mockup .screen-bar {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-    .hero-mockup .screen-bar span {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-    .hero-mockup .screen-bar span:nth-child(1) { background: #ef4444; }
-    .hero-mockup .screen-bar span:nth-child(2) { background: #eab308; }
-    .hero-mockup .screen-bar span:nth-child(3) { background: #22c55e; }
-    .hero-mockup .screen-line {
-      height: 10px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.04);
-      overflow: hidden;
-      position: relative;
-    }
-    .hero-mockup .screen-line::after {
-      content: '';
-      position: absolute;
-      left: -100%;
-      top: 0;
-      width: 60%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(124,58,237,0.3), transparent);
-      animation: shimmer 3s infinite;
-    }
-    .hero-mockup .screen-line.purple { background: rgba(124,58,237,0.15); }
-    .hero-mockup .screen-line.pink { background: rgba(236,72,153,0.15); }
-    .hero-mockup .screen-line.wide { height: 40px; border-radius: 8px; margin-top: 8px; }
-    .hero-mockup .screen-line.medium { width: 70%; }
-    .hero-mockup .screen-line.short { width: 40%; }
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 200%; }
-    }
-    .hero-mockup .wave-viz {
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      height: 30px;
-      margin-top: auto;
-    }
-    .hero-mockup .wave-viz span {
-      width: 4px;
-      border-radius: 2px;
-      background: linear-gradient(to top, #7c3aed, #ec4899);
-      animation: viz 1.5s ease-in-out infinite alternate;
-    }
-    .hero-mockup .wave-viz span:nth-child(1) { height: 40%; animation-delay: 0s; }
-    .hero-mockup .wave-viz span:nth-child(2) { height: 70%; animation-delay: 0.1s; }
-    .hero-mockup .wave-viz span:nth-child(3) { height: 50%; animation-delay: 0.2s; }
-    .hero-mockup .wave-viz span:nth-child(4) { height: 90%; animation-delay: 0.3s; }
-    .hero-mockup .wave-viz span:nth-child(5) { height: 60%; animation-delay: 0.4s; }
-    .hero-mockup .wave-viz span:nth-child(6) { height: 80%; animation-delay: 0.15s; }
-    .hero-mockup .wave-viz span:nth-child(7) { height: 45%; animation-delay: 0.35s; }
-    .hero-mockup .wave-viz span:nth-child(8) { height: 75%; animation-delay: 0.05s; }
-    @keyframes viz {
-      from { height: 20%; }
-      to { height: var(--h, 90%); }
-    }
-
-    /* ── Sections common ── */
-    section { padding: 100px 0; }
-    @media (max-width: 480px) { section { padding: 60px 0; } }
-    .section-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #7c3aed;
-      margin-bottom: 8px;
-    }
-    .section-title { margin-bottom: 16px; }
-    .section-subtitle {
-      font-size: 1.1rem;
-      color: #71717a;
-      max-width: 560px;
-      margin-bottom: 48px;
-    }
-    @media (max-width: 768px) { .section-subtitle { max-width: 100%; } }
-    @media (max-width: 480px) { .section-subtitle { font-size: 0.95rem; margin-bottom: 32px; } }
-
-    /* ── Features ── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
-    @media (max-width: 480px) { .features-grid { gap: 12px; } }
     .feature-card {
       padding: 28px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: default;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.3s;
     }
-    @media (max-width: 480px) { .feature-card { padding: 20px; } }
     .feature-card:hover {
-      background: rgba(124,58,237,0.04);
-      border-color: rgba(124,58,237,0.15);
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(139,92,246,0.2);
       transform: translateY(-4px);
     }
     .feature-icon {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
       margin-bottom: 16px;
-      background: rgba(124,58,237,0.1);
-      border: 1px solid rgba(124,58,237,0.12);
+      font-size: 20px;
     }
-    .feature-card h3 { margin-bottom: 8px; color: #fff; }
-    .feature-card p { font-size: 0.9rem; color: #71717a; }
-
-    /* ── How it works ── */
-    .steps {
-      position: relative;
-      padding-left: 32px;
-    }
-    .steps::before {
-      content: '';
-      position: absolute;
-      left: 15px;
-      top: 8px;
-      bottom: 8px;
-      width: 2px;
-      background: linear-gradient(to bottom, rgba(124,58,237,0.4), rgba(236,72,153,0.1));
-    }
-    .step-card {
-      position: relative;
-      padding: 20px 0 20px 40px;
-    }
-    .step-card .step-dot {
-      position: absolute;
-      left: -24px;
-      top: 24px;
-      width: 32px; height: 32px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .feature-card h3 {
+      font-size: 16px;
       font-weight: 700;
-      font-size: 0.85rem;
-      color: #fff;
-      box-shadow: 0 4px 16px rgba(124,58,237,0.3);
-    }
-    .step-card h3 { color: #fff; margin-bottom: 4px; }
-    .step-card p { font-size: 0.9rem; }
-    @media (max-width: 480px) { .step-card { padding: 16px 0 16px 32px; } .step-card .step-dot { width: 28px; height: 28px; font-size: 0.75rem; left: -20px; } }
-
-    /* ── Pricing ── */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    @media (max-width: 640px) { .pricing-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 480px) { .pricing-grid { gap: 16px; } }
-    .pricing-card {
-      padding: 36px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: all 0.3s;
-      position: relative;
-      cursor: pointer;
-    }
-    .pricing-card:hover { transform: translateY(-4px); }
-    @media (max-width: 480px) { .pricing-card { padding: 24px; border-radius: 16px; } }
-    .pricing-card.featured {
-      background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(236,72,153,0.05));
-      border-color: rgba(124,58,237,0.2);
-      box-shadow: 0 8px 40px rgba(124,58,237,0.08);
-    }
-    .pricing-card.featured .popular {
-      position: absolute;
-      top: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 6px 24px;
-      border-radius: 100px;
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 700;
-      white-space: nowrap;
-      z-index: 2;
-      box-shadow: 0 6px 24px rgba(124,58,237,0.35);
-      letter-spacing: 0.04em;
-    }
-    @media (max-width: 480px) { .pricing-card.featured .popular { font-size: 0.75rem; padding: 4px 16px; top: -11px; } }
-    .pricing-card .card-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      color: white;
       margin-bottom: 8px;
     }
-    .pricing-card .card-label.free { color: #a78bfa; }
-    .pricing-card .card-label.paid { color: #f472b6; }
-    .pricing-card .price {
-      font-size: 2.5rem;
+    .feature-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Pricing */
+    .pricing {
+      padding: 60px 0;
+      text-align: center;
+    }
+    .pricing h2 {
+      font-size: 32px;
       font-weight: 800;
-      color: #fff;
+      margin-bottom: 8px;
+    }
+    .pricing > p {
+      color: #666;
+      margin-bottom: 48px;
+      font-size: 16px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      padding: 36px 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      text-align: left;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: rgba(139,92,246,0.3);
+      background: rgba(139,92,246,0.06);
+    }
+    .pricing-card.featured::before {
+      content: 'РџРѕРїСѓР»СЏСЂРЅРѕРµ';
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      padding: 4px 14px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139,92,246,0.3);
+    }
+    .pricing-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
       margin-bottom: 4px;
     }
-    .pricing-card .price small {
-      font-size: 1rem;
-      color: #71717a;
-      font-weight: 400;
+    .pricing-card .sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
     }
-    @media (max-width: 480px) {
-      .pricing-card .price { font-size: 2rem; }
-      .pricing-card .price small { font-size: 0.85rem; }
+    .pricing-card .price {
+      font-size: 42px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 4px;
+    }
+    .pricing-card .price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: #666;
     }
     .pricing-card .price-desc {
-      font-size: 0.85rem;
-      color: #52525b;
-      margin-bottom: 20px;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 24px;
     }
     .pricing-card ul {
       list-style: none;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
     .pricing-card ul li {
-      padding: 8px 0;
-      font-size: 0.9rem;
-      color: #a1a1aa;
+      padding: 6px 0;
+      font-size: 14px;
+      color: #aaa;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    @media (max-width: 480px) { .pricing-card ul li { font-size: 0.85rem; padding: 6px 0; } }
     .pricing-card ul li::before {
       content: '';
-      width: 18px; height: 18px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") center/contain no-repeat;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
       flex-shrink: 0;
     }
-    .pricing-card .btn { width: 100%; justify-content: center; pointer-events: none; }
-    .pricing-card .btn-main { pointer-events: auto; }
+    .pricing-card .btn {
+      width: 100%;
+      justify-content: center;
+    }
 
-    /* Expandable details */
-    .pricing-details {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s ease, opacity 0.3s ease;
-      opacity: 0;
+    /* How it works */
+    .how-it-works {
+      padding: 60px 0;
+      text-align: center;
     }
-    .pricing-card.expanded .pricing-details {
-      max-height: 600px;
-      opacity: 1;
-      padding-top: 20px;
+    .how-it-works h2 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 48px;
     }
-    .pricing-card .expand-hint {
-      margin-top: 20px;
-      padding: 14px 20px;
-      font-size: 0.85rem;
-      color: #a1a1aa;
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+    }
+    .step {
+      text-align: center;
+    }
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(236,72,153,0.2));
+      border: 1px solid rgba(139,92,246,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      width: 100%;
-      cursor: pointer;
-      user-select: none;
-    }
-    @media (max-width: 480px) { .pricing-card .expand-hint { padding: 12px 14px; font-size: 0.8rem; margin-top: 16px; } }
-    .pricing-card:hover .expand-hint { color: #e4e4e7; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
-    .pricing-card.expanded .expand-hint { display: none; }
-    .pricing-card .expand-hint svg { transition: transform 0.3s; flex-shrink: 0; }
-    .pricing-card.expanded .expand-hint svg { transform: rotate(180deg); }
-    .email-template {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 12px;
-    }
-    .email-template .field {
-      margin-bottom: 12px;
-    }
-    .email-template .field:last-child { margin-bottom: 0; }
-    .email-template .field-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #52525b;
-      margin-bottom: 4px;
-    }
-    .email-template .field-value {
-      font-size: 0.9rem;
-      color: #e4e4e7;
-      word-break: break-all;
-      background: rgba(0,0,0,0.2);
-      padding: 8px 12px;
-      border-radius: 8px;
-      user-select: all;
-    }
-    .email-template .field-value.email { color: #a78bfa; }
-    .email-template .template-body {
-      font-size: 0.85rem;
-      color: #a1a1aa;
-      line-height: 1.7;
-      background: rgba(0,0,0,0.2);
-      padding: 12px 16px;
-      border-radius: 8px;
-      white-space: pre-line;
-      overflow-x: auto;
-    }
-    @media (max-width: 480px) { .email-template { padding: 14px; } .email-template .template-body { font-size: 0.8rem; padding: 10px 12px; } }
-    .email-template .template-body .highlight {
-      color: #f472b6;
-      font-weight: 600;
-    }
-    .email-template .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 10px;
-      padding: 6px 14px;
-      border-radius: 8px;
-      background: rgba(124,58,237,0.1);
-      border: 1px solid rgba(124,58,237,0.15);
+      margin: 0 auto 16px;
+      font-size: 18px;
+      font-weight: 800;
       color: #a78bfa;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
     }
-    .email-template .copy-btn:hover {
-      background: rgba(124,58,237,0.2);
+    .step h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 6px;
     }
-    .email-template .copy-btn.copied {
-      background: rgba(34,197,94,0.15);
-      border-color: rgba(34,197,94,0.3);
-      color: #22c55e;
+    .step p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
     }
 
-    /* ── Import section ── */
-    .import-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    /* FAQ */
+    .faq {
+      padding: 60px 0;
+      max-width: 700px;
+      margin: 0 auto;
     }
-    @media (max-width: 640px) { .import-details { grid-template-columns: 1fr; } }
-    @media (max-width: 480px) { .import-details { gap: 12px; } }
-    .import-item {
-      padding: 20px;
-      border-radius: 14px;
-      background: rgba(124,58,237,0.04);
-      border: 1px solid rgba(124,58,237,0.1);
-    }
-    .import-item h3 { color: #fff; font-size: 1rem; margin-bottom: 4px; }
-    .import-item p { font-size: 0.85rem; }
-
-    /* ── Tech specs ── */
-    .tech-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-    }
-    .tech-item {
-      padding: 16px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-    .tech-item .tech-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #52525b;
-      margin-bottom: 4px;
-    }
-    .tech-item .tech-value {
-      font-size: 0.9rem;
-      color: #a1a1aa;
-    }
-    @media (max-width: 480px) { .tech-item { padding: 12px; } .tech-item .tech-value { font-size: 0.85rem; } }
-
-    /* ── Download / CTA ── */
-    .cta-section {
+    .faq h2 {
+      font-size: 32px;
+      font-weight: 800;
       text-align: center;
-      padding: 100px 0;
+      margin-bottom: 40px;
     }
-    .cta-card {
-      padding: 64px 40px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.06), rgba(236,72,153,0.04));
-      border: 1px solid rgba(124,58,237,0.12);
-      position: relative;
-      overflow: hidden;
-    }
-    @media (max-width: 480px) { .cta-card { padding: 40px 20px; border-radius: 16px; } }
-    .cta-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 40%, rgba(124,58,237,0.06), transparent 60%);
-      pointer-events: none;
-    }
-    .cta-card h2 { margin-bottom: 12px; }
-    .cta-card p { margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto; }
-    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-    /* ── FAQ ── */
-    .faq-list { max-width: 640px; margin: 0 auto; }
     .faq-item {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
       padding: 20px 0;
     }
     .faq-question {
@@ -722,369 +385,568 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
+      font-weight: 600;
+      color: #ddd;
+      font-size: 15px;
       user-select: none;
     }
-    .faq-question h3 { font-size: 1rem; color: #e4e4e7; font-weight: 600; }
-    @media (max-width: 480px) { .faq-question h3 { font-size: 0.9rem; } }
-    .faq-question .faq-toggle {
-      font-size: 1.2rem;
-      color: #52525b;
-      transition: transform 0.3s;
-    }
-    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+    .faq-question:hover { color: white; }
     .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      display: none;
     }
-    .faq-item.open .faq-answer {
-      max-height: 300px;
-      padding-top: 12px;
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-chevron {
+      transition: transform 0.2s;
+      width: 20px;
+      height: 20px;
+      color: #666;
     }
-    .faq-answer p { font-size: 0.9rem; color: #71717a; }
 
-    /* ── Footer ── */
-    footer {
-      padding: 48px 0 32px;
-      border-top: 1px solid rgba(255,255,255,0.04);
+    /* Contact */
+    .contact {
       text-align: center;
+      padding: 60px 0 80px;
     }
-    footer p, footer a { font-size: 0.85rem; color: #52525b; }
-    footer a { text-decoration: none; }
-    footer a:hover { color: #a78bfa; }
-    .footer-links { display: flex; justify-content: center; gap: 20px; margin: 12px 0; }
-    @media (max-width: 480px) { footer { padding: 32px 0 24px; } .footer-links { flex-direction: column; gap: 8px; } }
+    .contact h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .contact p {
+      color: #666;
+      margin-bottom: 24px;
+    }
+    .contact a {
+      color: #a78bfa;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .contact a:hover { color: #c084fc; }
 
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 3px; }
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 13px;
+      color: #444;
+    }
 
-    /* ── File size info ── */
-    .file-info {
-      display: inline-flex;
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
       align-items: center;
-      gap: 4px;
-      font-size: 0.8rem;
-      color: #52525b;
-      margin-top: 8px;
+      justify-content: center;
+      padding: 24px;
     }
-    @media (max-width: 480px) { .file-info { font-size: 0.7rem; } }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #14141f;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 36px;
+      width: 100%;
+      max-width: 460px;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal h2 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .modal .sub {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .modal .form-group {
+      margin-bottom: 16px;
+    }
+    .modal label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+    .modal input, .modal textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .modal input:focus, .modal textarea:focus {
+      border-color: #7c3aed;
+    }
+    .modal textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .modal .btn { width: 100%; justify-content: center; }
+    .modal .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: none;
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal .close-btn:hover { background: rgba(255,255,255,0.12); }
+    .modal .success-msg {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .modal .success-msg .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(16,185,129,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .modal .success-msg h3 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .modal .success-msg p {
+      color: #666;
+      font-size: 14px;
+    }
+    .modal .pay-methods {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .modal .pay-methods button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: #aaa;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .modal .pay-methods button:hover {
+      border-color: #7c3aed;
+      color: white;
+      background: rgba(124,58,237,0.1);
+    }
+    .modal .pay-methods button.active {
+      border-color: #7c3aed;
+      color: white;
+      background: rgba(124,58,237,0.15);
+    }
+    .modal .paypal-btn {
+      margin-top: 16px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 48px 0 32px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .modal { padding: 24px; }
+    }
   </style>
 </head>
 <body>
+  <div class="bg-glow"></div>
 
-<div class="bg-canvas">
-  <div class="orb"></div>
-  <div class="orb"></div>
-  <div class="orb"></div>
-</div>
-<div class="grid-overlay"></div>
-
-<!-- ── Navbar ── -->
-<nav id="navbar">
   <div class="container">
-    <a href="#" class="nav-logo">WAWE</a>
-    <div class="nav-links">
-      <a href="#features">Возможности</a>
-      <a href="#how">Как начать</a>
-      <a href="#pricing">Доступ</a>
-      <a href="#faq">FAQ</a>
-      <a href="mailto:olehmudruk@yandex.by" class="btn btn-primary">Получить ключ</a>
-    </div>
-  </div>
-</nav>
+    <nav>
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        WAWE
+      </div>
+      <div class="nav-links">
+        <a href="#features">Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё</a>
+        <a href="#pricing">РљР»СЋС‡Рё</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">РљРѕРЅС‚Р°РєС‚С‹</a>
+        <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px;">РЎРєР°С‡Р°С‚СЊ</a>
+      </div>
+    </nav>
 
-<!-- ── Hero ── -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-content reveal visible">
-      <div class="hero-badge"><span class="dot"></span> v1.0.5 — последняя версия</div>
-      <h1>Музыка <span class="gradient-text">без границ</span></h1>
-      <p>WAWE — десктопный плеер Яндекс.Музыки с умной волной, поиском по множеству источников и полным качеством без подписки.</p>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        v1.0.5 вЂ” РїРѕСЃР»РµРґРЅСЏСЏ РІРµСЂСЃРёСЏ
+      </div>
+      <h1>РњСѓР·С‹РєР° Р±РµР·<br><span>РіСЂР°РЅРёС† Рё РїРѕРґРїРёСЃРѕРє</span></h1>
+      <p>
+        WAWE вЂ” РґРµСЃРєС‚РѕРїРЅС‹Р№ РєР»РёРµРЅС‚ РЇРЅРґРµРєСЃ.РњСѓР·С‹РєРё СЃ СѓРјРЅРѕР№ СЂРµРєРѕРјРµРЅРґР°С‚РµР»СЊРЅРѕР№ СЃРёСЃС‚РµРјРѕР№,
+        РїРѕРёСЃРєРѕРј РїРѕ РјРЅРѕР¶РµСЃС‚РІСѓ РёСЃС‚РѕС‡РЅРёРєРѕРІ Рё РїРѕР»РЅС‹Рј РєР°С‡РµСЃС‚РІРѕРј Р±РµР· РµР¶РµРјРµСЃСЏС‡РЅРѕР№ РїР»Р°С‚С‹.
+      </p>
       <div class="hero-buttons">
-        <a href="#pricing" class="btn btn-primary">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-          Узнать о доступе
+        <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          РЎРєР°С‡Р°С‚СЊ WAWE
         </a>
         <a href="#features" class="btn btn-secondary">
-          Подробнее
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё
         </a>
       </div>
-      <div class="file-info">📦 Скачивание будет доступно сегодня ближе к 00:00</div>
-    </div>
-    <div class="hero-visual reveal visible reveal-delay-2">
-      <div class="hero-mockup">
-        <div class="screen-content">
-          <div class="screen-bar">
-            <span></span><span></span><span></span>
-          </div>
-          <div class="screen-line" style="width:60%"></div>
-          <div class="screen-line purple medium"></div>
-          <div class="screen-line pink short"></div>
-          <div class="screen-line wide"></div>
-          <div class="screen-line" style="width:50%"></div>
-          <div class="screen-line purple" style="width:75%"></div>
-          <div class="wave-viz">
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
-          </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(168,85,247,0.2));">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        <h3>РњСѓР»СЊС‚Рё-РїРѕРёСЃРє</h3>
+        <p>РС‰РµС‚ С‚СЂРµРєРё РІ HitMotop, iTunes, Deezer, SoundCloud, Last.fm вЂ” РѕР±СЉРµРґРёРЅСЏРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚С‹ Рё РІС‹Р±РёСЂР°РµС‚ Р»СѓС‡С€РµРµ РєР°С‡РµСЃС‚РІРѕ.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(236,72,153,0.2), rgba(244,114,182,0.2));">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#f472b6"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <h3>РР·Р±СЂР°РЅРЅРѕРµ Рё РїР»РµР№Р»РёСЃС‚С‹</h3>
+        <p>РЎРѕС…СЂР°РЅСЏР№С‚Рµ Р»СЋР±РёРјС‹Рµ С‚СЂРµРєРё, СЃРѕР·РґР°РІР°Р№С‚Рµ РїР»РµР№Р»РёСЃС‚С‹, СѓРїСЂР°РІР»СЏР№С‚Рµ РѕС‡РµСЂРµРґСЊСЋ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(52,211,153,0.2));">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#34d399"><path d="M21 6h-2v3h-2V6h-2V4h2V1h2v3h2v2zm-10-2v2H7V4h4zm0 4v2H7V8h4zm0 4v2H7v-2h4zm4 4H3v2h12v-2zm0-4H3v2h12v-2z"/></svg>
+        </div>
+        <h3>Р‘РµР· РїРѕРґРїРёСЃРєРё</h3>
+        <p>РќРёРєР°РєРѕР№ РµР¶РµРјРµСЃСЏС‡РЅРѕР№ РїР»Р°С‚С‹. РџРѕРєСѓРїР°РµС‚Рµ РєР»СЋС‡ РѕРґРёРЅ СЂР°Р· вЂ” РїРѕР»СЊР·СѓРµС‚РµСЃСЊ РЅР°РІСЃРµРіРґР°.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,146,60,0.2));">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#fbbf24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </div>
+        <h3>РњРѕСЏ РІРѕР»РЅР°</h3>
+        <p>РЈРјРЅР°СЏ СЂРµРєРѕРјРµРЅРґР°С‚РµР»СЊРЅР°СЏ СЃРёСЃС‚РµРјР° РїРѕРґР±РёСЂР°РµС‚ С‚СЂРµРєРё РїРѕРґ РІР°С€Рµ РЅР°СЃС‚СЂРѕРµРЅРёРµ вЂ” РІС‹Р±РµСЂРёС‚Рµ mood РёР»Рё РІРєР»СЋС‡РёС‚Рµ Р±РµСЃРєРѕРЅРµС‡РЅС‹Р№ РїРѕС‚РѕРє.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+      <h2>РљР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>РЎРєР°С‡Р°Р№С‚Рµ РїСЂРёР»РѕР¶РµРЅРёРµ</h3>
+          <p>РЎРєР°С‡Р°Р№С‚Рµ WAWE.exe РёР· СЂР°Р·РґРµР»Р° В«РЎРєР°С‡Р°С‚СЊВ» вЂ” СѓСЃС‚Р°РЅРѕРІРєР° РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>РђРєС‚РёРІРёСЂСѓР№С‚Рµ РґРѕСЃС‚СѓРї</h3>
+          <p>Р’РІРµРґРёС‚Рµ Р±РµСЃРїР»Р°С‚РЅС‹Р№ РёР»Рё РїСЂРµРјРёСѓРј-РєР»СЋС‡, С‡С‚РѕР±С‹ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ РІСЃРµ С„СѓРЅРєС†РёРё</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>РЎР»СѓС€Р°Р№С‚Рµ РјСѓР·С‹РєСѓ</h3>
+          <p>РС‰РёС‚Рµ С‚СЂРµРєРё, СЃРѕР·РґР°РІР°Р№С‚Рµ РїР»РµР№Р»РёСЃС‚С‹, РІРєР»СЋС‡Р°Р№С‚Рµ В«РњРѕСЋ РІРѕР»РЅСѓВ» Рё РЅР°СЃР»Р°Р¶РґР°Р№С‚РµСЃСЊ</p>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ── Features ── -->
-<section id="features">
-  <div class="container">
-    <div class="reveal"><span class="section-label">Возможности</span></div>
-    <h2 class="section-title reveal">Всё, что нужно для музыки</h2>
-    <p class="section-subtitle reveal">WAWE объединяет лучшие источники в одном интерфейсе. Никаких ограничений, только твоя музыка.</p>
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon">📥</div>
-        <h3>Импорт из Яндекс Музыки</h3>
-        <p>Загружай плейлисты, альбомы и избранное по ссылке или через OAuth. Все треки автоматически находят полные MP3-версии.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon">📻</div>
-        <h3>Радио «Моя волна»</h3>
-        <p>Персональная радиостанция на основе твоих лайков. Бесконечный поток музыки, которая тебе нравится.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon">🔍</div>
-        <h3>Поиск треков</h3>
-        <p>Объединённый поиск по HitMotop, iTunes, Deezer и Last.fm. Находи любую музыку и слушай сразу.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon">🎵</div>
-        <h3>Полные MP3</h3>
-        <p>Никаких 30-секундных превью. Только полные версии треков в высоком качестве (320 kbps).</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon">🎨</div>
-        <h3>Стильный интерфейс</h3>
-        <p>Тёмная тема с фиолетово-розовой эстетикой, плавные анимации, визуализатор аудио и адаптивный дизайн.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon">📋</div>
-        <h3>Плейлисты</h3>
-        <p>Создавай, редактируй, перемешивай треки. Импорт из внешних источников в пару кликов.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── How it works ── -->
-<section id="how">
-  <div class="container">
-    <div class="reveal"><span class="section-label">Как начать</span></div>
-    <h2 class="section-title reveal">3 шага до твоей музыки</h2>
-    <p class="section-subtitle reveal">Получить доступ к WAWE очень просто.</p>
-    <div class="steps" style="max-width:560px; margin:0 auto;">
-      <div class="step-card reveal">
-        <div class="step-dot">1</div>
-        <h3>Скачай WAWE</h3>
-        <p>Загрузи единственный .exe-файл (89 МБ). Никакой установки — просто запусти и пользуйся.</p>
-      </div>
-      <div class="step-card reveal reveal-delay-1">
-        <div class="step-dot">2</div>
-        <h3>Авторизуйся через Яндекс</h3>
-        <p>Войди в приложение через Яндекс OAuth. Твой Яндекс ID будет использован для активации.</p>
-      </div>
-      <div class="step-card reveal reveal-delay-2">
-        <div class="step-dot">3</div>
-        <h3>Слушай</h3>
-        <p>Импортируй треки из Яндекс Музыки, создавай плейлисты, включай «Мою волну» и наслаждайся.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Import details ── -->
-<section id="import">
-  <div class="container">
-    <div class="reveal"><span class="section-label">Импорт</span></div>
-    <h2 class="section-title reveal">Импорт из Яндекс Музыки</h2>
-    <p class="section-subtitle reveal">WAWE поддерживает три способа импорта твоей музыки.</p>
-    <div class="import-details">
-      <div class="import-item reveal">
-        <h3>🔗 По ссылке на плейлист</h3>
-        <p>Вставь URL плейлиста Яндекс Музыки — новый UUID-формат или старый. Все треки будут импортированы.</p>
-      </div>
-      <div class="import-item reveal reveal-delay-1">
-        <h3>💿 По ссылке на альбом</h3>
-        <p>Загрузи все треки альбома целиком. Идеально для прослушивания новых релизов.</p>
-      </div>
-      <div class="import-item reveal">
-        <h3>❤️ Избранное (лайки)</h3>
-        <p>Одним нажатием импортируй все треки, которые ты отметил «Мне нравится» в Яндекс Музыке.</p>
-      </div>
-      <div class="import-item reveal reveal-delay-1">
-        <h3>🎯 Автоподбор аудио</h3>
-        <p>После импорта WAWE сам находит полные MP3-версии через HitMotop. Треки готовы к прослушиванию сразу.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Access ── -->
-<section id="pricing">
-  <div class="container">
-    <div class="reveal"><span class="section-label">Доступ</span></div>
-    <h2 class="section-title reveal">Как получить доступ</h2>
-    <p class="section-subtitle reveal">WAWE — бесплатный проект. Доступ открывается после активации по Яндекс ID.</p>
-    <div class="pricing-grid" style="grid-template-columns: 1fr;">
-      <div class="pricing-card reveal" style="text-align: center; max-width: 500px; margin: 0 auto; cursor: default;">
-        <div class="feature-icon" style="margin: 0 auto 16px; background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.12);">🔑</div>
-        <h3 style="margin-bottom: 8px;">Доступ по приглашению</h3>
-        <p style="font-size: 0.9rem; color: #71717a; margin-bottom: 20px;">
-          Версия для скачивания будет доступна сегодня до 00:00.<br>
-          Следите за обновлениями.
-        </p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <a href="mailto:olehmudruk@yandex.by" class="btn btn-secondary">
-            📬 Связаться
-          </a>
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+      <h2>Р’С‹Р±РµСЂРёС‚Рµ СЃРїРѕСЃРѕР± РґРѕСЃС‚СѓРїР°</h2>
+      <p>РћРґРЅРѕСЂР°Р·РѕРІР°СЏ РїР»Р°С‚Р° вЂ” РЅРёРєР°РєРёС… РїРѕРґРїРёСЃРѕРє</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Р‘РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡</h3>
+          <p class="sub">Р’СЃС‚Р°РЅСЊС‚Рµ РІ РѕС‡РµСЂРµРґСЊ</p>
+          <div class="price">0 <span>в‚Ѕ</span></div>
+          <p class="price-desc">РќР°РІСЃРµРіРґР°, Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёР№</p>
+          <ul>
+            <li>РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї Рє WAWE</li>
+            <li>Р’СЃРµ С„СѓРЅРєС†РёРё РїСЂРёР»РѕР¶РµРЅРёСЏ</li>
+            <li>Р‘РµСЃРїР»Р°С‚РЅС‹Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ</li>
+          </ul>
+          <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-secondary">РЎРєР°С‡Р°С‚СЊ WAWE</a>
+        </div>
+        <div class="pricing-card featured">
+          <h3>РџСЂРµРјРёСѓРј РєР»СЋС‡</h3>
+          <p class="sub">РњРіРЅРѕРІРµРЅРЅС‹Р№ РґРѕСЃС‚СѓРї</p>
+          <div class="price">100 <span>в‚Ѕ</span></div>
+          <p class="price-desc">РћРґРёРЅ РїР»Р°С‚С‘Р¶ вЂ” РЅР°РІСЃРµРіРґР°</p>
+          <ul>
+            <li>РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї Рє WAWE</li>
+            <li>Р’СЃРµ С„СѓРЅРєС†РёРё РїСЂРёР»РѕР¶РµРЅРёСЏ</li>
+            <li>Р‘РµСЃРїР»Р°С‚РЅС‹Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ</li>
+            <li>РџСЂРёРѕСЂРёС‚РµС‚РЅР°СЏ РїРѕРґРґРµСЂР¶РєР°</li>
+            <li>РђРєС‚РёРІР°С†РёСЏ Р±РµР· РѕР¶РёРґР°РЅРёСЏ</li>
+          </ul>
+          <button onclick="openModal('paid')" class="btn btn-primary">РљСѓРїРёС‚СЊ СЃРµР№С‡Р°СЃ</button>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ── Tech ── -->
-<section>
-  <div class="container">
-    <div class="reveal"><span class="section-label">Технологии</span></div>
-    <h2 class="section-title reveal">Как это сделано</h2>
-    <p class="section-subtitle reveal">WAWE построен на современном стеке и работает полностью локально.</p>
-    <div class="tech-grid">
-      <div class="tech-item reveal"><div class="tech-label">Клиент</div><div class="tech-value">React 19 + TypeScript + Vite + Tailwind</div></div>
-      <div class="tech-item reveal reveal-delay-1"><div class="tech-label">Аудиоплеер</div><div class="tech-value">Howler.js с визуализатором</div></div>
-      <div class="tech-item reveal"><div class="tech-label">Сервер</div><div class="tech-value">Node.js SEA (встроен в .exe)</div></div>
-      <div class="tech-item reveal reveal-delay-1"><div class="tech-label">Активация</div><div class="tech-value">RSA-SHA256 + AES-256-GCM</div></div>
-      <div class="tech-item reveal"><div class="tech-label">Поиск музыки</div><div class="tech-value">HitMotop, iTunes, Deezer, Last.fm</div></div>
-      <div class="tech-item reveal reveal-delay-1"><div class="tech-label">Хранилище</div><div class="tech-value">GitHub API + IndexedDB</div></div>
-      <div class="tech-item reveal"><div class="tech-label">Формат</div><div class="tech-value">Один .exe (SEA), без установки</div></div>
-      <div class="tech-item reveal reveal-delay-1"><div class="tech-label">Платформа</div><div class="tech-value">Windows 10 / 11</div></div>
-    </div>
-  </div>
-</section>
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+      <h2>Р§Р°СЃС‚Рѕ Р·Р°РґР°РІР°РµРјС‹Рµ РІРѕРїСЂРѕСЃС‹</h2>
+      <div class="faq-item open">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Р§С‚Рѕ С‚Р°РєРѕРµ WAWE?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">WAWE вЂ” СЌС‚Рѕ РґРµСЃРєС‚РѕРїРЅС‹Р№ РєР»РёРµРЅС‚ РЇРЅРґРµРєСЃ.РњСѓР·С‹РєРё. РћРЅ Р°РіСЂРµРіРёСЂСѓРµС‚ С‚СЂРµРєРё РёР· РѕС‚РєСЂС‹С‚С‹С… РёСЃС‚РѕС‡РЅРёРєРѕРІ (HitMotop, iTunes, Deezer, SoundCloud, Last.fm), РїСЂРµРґРѕСЃС‚Р°РІР»СЏСЏ СѓРґРѕР±РЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ СЃ СѓРјРЅРѕР№ СЂРµРєРѕРјРµРЅРґР°С‚РµР»СЊРЅРѕР№ СЃРёСЃС‚РµРјРѕР№ В«РњРѕСЏ РІРѕР»РЅР°В», РїР»РµР№Р»РёСЃС‚Р°РјРё Рё СЌРєРІР°Р»Р°Р№Р·РµСЂРѕРј вЂ” Р±РµР· РµР¶РµРјРµСЃСЏС‡РЅРѕР№ РїРѕРґРїРёСЃРєРё.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          РљР°Рє РїРѕР»СѓС‡РёС‚СЊ Р±РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">РќР°Р¶РјРёС‚Рµ В«Р—Р°РїСЂРѕСЃРёС‚СЊ РґРѕСЃС‚СѓРїВ» РІ СЂР°Р·РґРµР»Рµ В«Р‘РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡В», Р·Р°РїРѕР»РЅРёС‚Рµ С„РѕСЂРјСѓ. РњС‹ РґРѕР±Р°РІРёРј РІР°СЃ РІ Р»РёСЃС‚ РѕР¶РёРґР°РЅРёСЏ Рё РѕС‚РїСЂР°РІРёРј РєР»СЋС‡ РЅР° СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕС‡С‚Сѓ РІ РїРѕСЂСЏРґРєРµ РѕС‡РµСЂРµРґРё.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          РљР°Рє РєСѓРїРёС‚СЊ РїСЂРµРјРёСѓРј-РєР»СЋС‡?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">РќР°Р¶РјРёС‚Рµ В«РљСѓРїРёС‚СЊ СЃРµР№С‡Р°СЃВ» РІ СЂР°Р·РґРµР»Рµ В«РџСЂРµРјРёСѓРј РєР»СЋС‡В», РІС‹Р±РµСЂРёС‚Рµ СѓРґРѕР±РЅС‹Р№ СЃРїРѕСЃРѕР± РѕРїР»Р°С‚С‹ Рё СЃРѕРІРµСЂС€РёС‚Рµ РїР»Р°С‚С‘Р¶. РљР»СЋС‡ РїСЂРёРґС‘С‚ РЅР° РІР°С€Сѓ РїРѕС‡С‚Сѓ РјРіРЅРѕРІРµРЅРЅРѕ РїРѕСЃР»Рµ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ РѕРїР»Р°С‚С‹.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          РЎРєРѕР»СЊРєРѕ РґРµР№СЃС‚РІСѓРµС‚ РєР»СЋС‡?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">РљР»СЋС‡ РґРµР№СЃС‚РІСѓРµС‚ Р±РµСЃСЃСЂРѕС‡РЅРѕ. Р’С‹ РїРѕРєСѓРїР°РµС‚Рµ РґРѕСЃС‚СѓРї РѕРґРёРЅ СЂР°Р· Рё РїРѕР»СЊР·СѓРµС‚РµСЃСЊ РїСЂРёР»РѕР¶РµРЅРёРµРј РЅР°РІСЃРµРіРґР°. Р’СЃРµ РѕР±РЅРѕРІР»РµРЅРёСЏ С‚Р°РєР¶Рµ Р±РµСЃРїР»Р°С‚РЅС‹.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          РњРѕР¶РЅРѕ Р»Рё РїРµСЂРµРЅРµСЃС‚Рё РєР»СЋС‡ РЅР° РґСЂСѓРіРѕР№ РєРѕРјРїСЊСЋС‚РµСЂ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">Р”Р°, РєР»СЋС‡ РјРѕР¶РЅРѕ РѕС‚РІСЏР·Р°С‚СЊ РѕС‚ СЃС‚Р°СЂРѕРіРѕ СѓСЃС‚СЂРѕР№СЃС‚РІР° Рё Р°РєС‚РёРІРёСЂРѕРІР°С‚СЊ РЅР° РЅРѕРІРѕРј. Р”Р»СЏ СЌС‚РѕРіРѕ РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ С„СѓРЅРєС†РёРµР№ В«РћС‚РІСЏР·Р°С‚СЊ РєР»СЋС‡В» РІ РїСЂРёР»РѕР¶РµРЅРёРё.</div>
+      </div>
+    </section>
 
-<!-- ── FAQ ── -->
-<section id="faq">
-  <div class="container">
-    <div class="reveal"><span class="section-label">FAQ</span></div>
-    <h2 class="section-title reveal">Часто задаваемые вопросы</h2>
-    <p class="section-subtitle reveal">Ответы на самые популярные вопросы.</p>
-    <div class="faq-list">
-      <div class="faq-item reveal">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-          <h3>Что такое WAWE?</h3>
-          <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer"><p>WAWE — десктопное приложение для Windows, которое позволяет слушать музыку из Яндекс Музыки без ограничений. Оно ищет полные MP3-версии треков, создаёт персональное радио «Моя волна» и даёт полный контроль над твоей музыкальной библиотекой.</p></div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-          <h3>Нужна ли подписка на Яндекс Музыку?</h3>
-          <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer"><p>Нет. WAWE использует твой бесплатный Яндекс ID для импорта треков (названия, обложки, плейлисты). Сами аудиофайлы находятся через открытые источники (HitMotop).</p></div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-          <h3>Когда будет доступно скачивание?</h3>
-          <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer"><p>Версия для скачивания будет доступна сегодня до 00:00. Следите за обновлениями. Если хотите получить уведомление, напишите на почту.</p></div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-          <h3>Это безопасно?</h3>
-          <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer"><p>Да. WAWE — клиентское приложение, весь код работает локально на твоём компьютере. Токен Яндекс хранится только у тебя. Активация использует RSA-SHA256 подпись и AES-256-GCM шифрование. Никакие данные не передаются третьим лицам.</p></div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-          <h3>Почему .exe такой большой?</h3>
-          <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer"><p>WAWE — это standalone-приложение, собранное через Node.js Single Executable Application. Внутри .exe находится весь Node.js runtime, React-клиент и встроенный сервер. Ничего не нужно устанавливать — просто запусти файл.</p></div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-          <h3>Будет ли версия для macOS/Linux?</h3>
-          <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer"><p>Пока нет. WAWE заточен под Windows. macOS и Linux версии в планах, но без конкретных сроков.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ── -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-card reveal">
-      <h2>Готов попробовать?</h2>
-      <p>Следите за новостями — скоро откроется свободный доступ к WAWE.</p>
-      <div class="cta-buttons">
-        <a href="mailto:olehmudruk@yandex.by" class="btn btn-secondary">
-          📬 Связаться
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Footer ── -->
-<footer>
-  <div class="container">
-    <div class="footer-links">
+    <!-- Contact -->
+    <section id="contact" class="contact">
+      <h2>РћСЃС‚Р°Р»РёСЃСЊ РІРѕРїСЂРѕСЃС‹?</h2>
+      <p>РќР°РїРёС€РёС‚Рµ РЅР°Рј вЂ” РјС‹ РІСЃРµРіРґР° РЅР° СЃРІСЏР·Рё</p>
       <a href="mailto:olehmudruk@yandex.by">olehmudruk@yandex.by</a>
-      <a href="https://github.com/Doinwor">GitHub</a>
-    </div>
-    <p>© 2026 WAWE. Независимый проект, не связан с Яндекс Музыкой.</p>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 WAWE. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹. РЎРґРµР»Р°РЅРѕ СЃ вќ¤пёЏ РґР»СЏ Р»СЋР±РёС‚РµР»РµР№ РјСѓР·С‹РєРё.</p>
+    </footer>
   </div>
-</footer>
 
-<!-- ── Scripts ── -->
-<script>
-  // Navbar scroll
-  const navbar = document.getElementById('navbar');
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        navbar.classList.toggle('scrolled', window.scrollY > 50);
-        ticking = false;
-      });
-      ticking = true;
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal" style="position: relative;">
+      <button class="close-btn" onclick="closeModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Free form -->
+      <div id="modalFree">
+        <h2>Р—Р°РїСЂРѕСЃРёС‚СЊ Р±РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡</h2>
+        <p class="sub">Р’СЃС‚Р°РЅСЊС‚Рµ РІ РѕС‡РµСЂРµРґСЊ РЅР° РїРѕР»СѓС‡РµРЅРёРµ Р±РµСЃРїР»Р°С‚РЅРѕРіРѕ РєР»СЋС‡Р° Р°РєС‚РёРІР°С†РёРё</p>
+        <div class="form-group">
+          <label for="freeName">Р’Р°С€Рµ РёРјСЏ</label>
+          <input type="text" id="freeName" placeholder="РљР°Рє Рє РІР°Рј РѕР±СЂР°С‰Р°С‚СЊСЃСЏ" required>
+        </div>
+        <div class="form-group">
+          <label for="freeEmail">Email</label>
+          <input type="email" id="freeEmail" placeholder="example@mail.com" required>
+        </div>
+        <div class="form-group">
+          <label for="freeComment">РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅРѕ)</label>
+          <textarea id="freeComment" placeholder="Р Р°СЃСЃРєР°Р¶РёС‚Рµ Рѕ СЃРµР±Рµ..."></textarea>
+        </div>
+        <button onclick="submitFreeRequest()" class="btn btn-secondary">РћС‚РїСЂР°РІРёС‚СЊ Р·Р°СЏРІРєСѓ</button>
+      </div>
+
+      <!-- Paid form -->
+      <div id="modalPaid" style="display: none;">
+        <h2>РљСѓРїРёС‚СЊ РїСЂРµРјРёСѓРј-РєР»СЋС‡</h2>
+        <p class="sub">РњРіРЅРѕРІРµРЅРЅР°СЏ Р°РєС‚РёРІР°С†РёСЏ РїРѕСЃР»Рµ РѕРїР»Р°С‚С‹</p>
+        <div style="text-align: center; margin-bottom: 16px;">
+          <span style="font-size: 36px; font-weight: 900; color: white;">100</span>
+          <span style="font-size: 16px; color: #666;"> в‚Ѕ</span>
+        </div>
+        <div class="form-group">
+          <label for="paidEmail">Email РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РєР»СЋС‡Р°</label>
+          <input type="email" id="paidEmail" placeholder="example@mail.com" required>
+        </div>
+        <div id="paidSuccess" style="display: none;">
+          <div class="success-msg">
+            <div class="icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3>РЎРїР°СЃРёР±Рѕ Р·Р° РїРѕРєСѓРїРєСѓ!</h3>
+            <p>РљР»СЋС‡ Р±СѓРґРµС‚ РѕС‚РїСЂР°РІР»РµРЅ РЅР° СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕС‡С‚Сѓ РІ Р±Р»РёР¶Р°Р№С€РµРµ РІСЂРµРјСЏ.</p>
+          </div>
+        </div>
+        <div id="paidForm">
+          <div class="form-group">
+            <label>РЎРїРѕСЃРѕР± РѕРїР»Р°С‚С‹</label>
+            <div class="pay-methods">
+              <button class="active" onclick="selectPayMethod(this, 'card')">РљР°СЂС‚Р°</button>
+              <button onclick="selectPayMethod(this, 'sbp')">РЎР‘Рџ</button>
+              <button onclick="selectPayMethod(this, 'usdt')">USDT</button>
+            </div>
+          </div>
+          <button onclick="submitPaid()" class="btn btn-primary">РћРїР»Р°С‚РёС‚СЊ 100 в‚Ѕ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleFaq(el) {
+      el.parentElement.classList.toggle('open');
     }
-  });
 
-  // Reveal animations with Intersection Observer
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+    function openModal(type) {
+      document.getElementById('modal').classList.add('open');
+      document.getElementById('modalFree').style.display = type === 'free' ? 'block' : 'none';
+      document.getElementById('modalPaid').style.display = type === 'paid' ? 'block' : 'none';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
 
-  // FAQ open by default — show first
-  document.querySelectorAll('.faq-item').forEach((item, i) => {
-    if (i === 0) item.classList.add('open');
-  });
+    function selectPayMethod(el) {
+      document.querySelectorAll('.pay-methods button').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+    }
 
+    function submitFreeRequest() {
+      const name = document.getElementById('freeName').value.trim();
+      const email = document.getElementById('freeEmail').value.trim();
+      if (!name || !email) {
+        alert('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, Р·Р°РїРѕР»РЅРёС‚Рµ РёРјСЏ Рё email.');
+        return;
+      }
 
-</script>
+      const btn = document.querySelector('#modalFree .btn');
+      btn.textContent = 'РћС‚РїСЂР°РІР»СЏРµРј...';
+      btn.disabled = true;
+
+      fetch('https://formsubmit.co/ajax/olehmudruk@yandex.by', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'WAWE вЂ” Р—Р°РїСЂРѕСЃ Р±РµСЃРїР»Р°С‚РЅРѕРіРѕ РєР»СЋС‡Р°',
+          name: name,
+          email: email,
+          comment: document.getElementById('freeComment').value.trim(),
+          type: 'free'
+        })
+      })
+      .then(r => r.json())
+      .then(() => {
+        document.querySelector('#modalFree').innerHTML = `
+          <div class="success-msg">
+            <div class="icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+            <h3>Р—Р°СЏРІРєР° РїСЂРёРЅСЏС‚Р°!</h3>
+            <p>РњС‹ СЃРІСЏР¶РµРјСЃСЏ СЃ РІР°РјРё, РєРѕРіРґР° РїРѕРґРѕР№РґС‘С‚ РѕС‡РµСЂРµРґСЊ. РћР±С‹С‡РЅРѕ РѕР¶РёРґР°РЅРёРµ СЃРѕСЃС‚Р°РІР»СЏРµС‚ 1вЂ“3 РґРЅСЏ.</p>
+            <button onclick="closeModal()" class="btn btn-secondary" style="margin-top: 20px;">Р—Р°РєСЂС‹С‚СЊ</button>
+          </div>
+        `;
+      })
+      .catch(() => {
+        btn.textContent = 'РћС‚РїСЂР°РІРёС‚СЊ Р·Р°СЏРІРєСѓ';
+        btn.disabled = false;
+        alert('РћС€РёР±РєР° РѕС‚РїСЂР°РІРєРё. РџРѕРїСЂРѕР±СѓР№С‚Рµ РїРѕР·Р¶Рµ РёР»Рё РЅР°РїРёС€РёС‚Рµ РЅР°Рј РЅР° РїРѕС‡С‚Сѓ.');
+      });
+    }
+
+    function submitPaid() {
+      const email = document.getElementById('paidEmail').value.trim();
+      if (!email) {
+        alert('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, СѓРєР°Р¶РёС‚Рµ email РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РєР»СЋС‡Р°.');
+        return;
+      }
+
+      const btn = document.querySelector('#paidForm .btn');
+      btn.textContent = 'РћР±СЂР°Р±РѕС‚РєР°...';
+      btn.disabled = true;
+
+      const method = document.querySelector('.pay-methods .active');
+      const methodName = method ? method.textContent : 'card';
+
+      fetch('https://formsubmit.co/ajax/olehmudruk@yandex.by', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'WAWE вЂ” РџРѕРєСѓРїРєР° РїСЂРµРјРёСѓРј-РєР»СЋС‡Р°',
+          email: email,
+          method: methodName,
+          type: 'paid'
+        })
+      })
+      .then(r => r.json())
+      .then(() => {
+        document.getElementById('paidForm').style.display = 'none';
+        document.getElementById('paidSuccess').style.display = 'block';
+      })
+      .catch(() => {
+        btn.textContent = 'РћРїР»Р°С‚РёС‚СЊ 100 в‚Ѕ';
+        btn.disabled = false;
+        alert('РћС€РёР±РєР° РѕР±СЂР°Р±РѕС‚РєРё. РџРѕРїСЂРѕР±СѓР№С‚Рµ РїРѕР·Р¶Рµ РёР»Рё РЅР°РїРёС€РёС‚Рµ РЅР°Рј РЅР° РїРѕС‡С‚Сѓ.');
+      });
+    }
+
+  </script>
 </body>
 </html>
-
