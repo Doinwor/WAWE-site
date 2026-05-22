@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WAWE вЂ” Yandex Music Client</title>
+  <title>WAWE — Yandex Music Client</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -15,7 +15,6 @@
       overflow-x: hidden;
     }
 
-    /* Background effects */
     .bg-glow {
       position: fixed;
       inset: 0;
@@ -54,7 +53,6 @@
       padding: 0 24px;
     }
 
-    /* Nav */
     nav {
       display: flex;
       align-items: center;
@@ -97,10 +95,9 @@
     }
     .nav-links a:hover { color: #c084fc; }
 
-    /* Hero */
     .hero {
       text-align: center;
-      padding: 80px 0 60px;
+      padding: 100px 0 60px;
     }
     .hero-badge {
       display: inline-flex;
@@ -174,7 +171,6 @@
       transform: translateY(-2px);
     }
 
-    /* Features */
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -201,7 +197,6 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 16px;
-      font-size: 20px;
     }
     .feature-card h3 {
       font-size: 16px;
@@ -215,125 +210,18 @@
       line-height: 1.6;
     }
 
-    /* Pricing */
-    .pricing {
-      padding: 60px 0;
-      text-align: center;
-    }
-    .pricing h2 {
-      font-size: 32px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-    .pricing > p {
-      color: #666;
-      margin-bottom: 48px;
-      font-size: 16px;
-    }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    .pricing-card {
-      padding: 36px 28px;
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      text-align: left;
-      transition: all 0.3s;
-      position: relative;
-    }
-    .pricing-card.featured {
-      border-color: rgba(139,92,246,0.3);
-      background: rgba(139,92,246,0.06);
-    }
-    .pricing-card.featured::before {
-      content: 'РџРѕРїСѓР»СЏСЂРЅРѕРµ';
-      position: absolute;
-      top: -12px;
-      right: 24px;
-      padding: 4px 14px;
-      border-radius: 50px;
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .pricing-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(139,92,246,0.3);
-    }
-    .pricing-card h3 {
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 4px;
-    }
-    .pricing-card .sub {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-    .pricing-card .price {
-      font-size: 42px;
-      font-weight: 900;
-      color: white;
-      margin-bottom: 4px;
-    }
-    .pricing-card .price span {
-      font-size: 16px;
-      font-weight: 400;
-      color: #666;
-    }
-    .pricing-card .price-desc {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 24px;
-    }
-    .pricing-card ul {
-      list-style: none;
-      margin-bottom: 28px;
-    }
-    .pricing-card ul li {
-      padding: 6px 0;
-      font-size: 14px;
-      color: #aaa;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .pricing-card ul li::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      flex-shrink: 0;
-    }
-    .pricing-card .btn {
-      width: 100%;
-      justify-content: center;
-    }
-
-    /* How it works */
-    .how-it-works {
-      padding: 60px 0;
-      text-align: center;
-    }
-    .how-it-works h2 {
-      font-size: 32px;
-      font-weight: 800;
-      margin-bottom: 48px;
-    }
     .steps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 32px;
+      padding: 60px 0;
+      text-align: center;
+    }
+    .steps h2 {
+      grid-column: 1 / -1;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 16px;
     }
     .step {
       text-align: center;
@@ -364,50 +252,6 @@
       line-height: 1.6;
     }
 
-    /* FAQ */
-    .faq {
-      padding: 60px 0;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    .faq h2 {
-      font-size: 32px;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .faq-item {
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 20px 0;
-    }
-    .faq-question {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 600;
-      color: #ddd;
-      font-size: 15px;
-      user-select: none;
-    }
-    .faq-question:hover { color: white; }
-    .faq-answer {
-      margin-top: 12px;
-      font-size: 14px;
-      color: #666;
-      line-height: 1.7;
-      display: none;
-    }
-    .faq-item.open .faq-answer { display: block; }
-    .faq-item.open .faq-chevron { transform: rotate(180deg); }
-    .faq-chevron {
-      transition: transform 0.2s;
-      width: 20px;
-      height: 20px;
-      color: #666;
-    }
-
-    /* Contact */
     .contact {
       text-align: center;
       padding: 60px 0 80px;
@@ -429,7 +273,6 @@
     }
     .contact a:hover { color: #c084fc; }
 
-    /* Footer */
     footer {
       border-top: 1px solid rgba(255,255,255,0.05);
       padding: 24px 0;
@@ -438,162 +281,14 @@
       color: #444;
     }
 
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: #14141f;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 36px;
-      width: 100%;
-      max-width: 460px;
-      animation: modalIn 0.25s ease;
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.95) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .modal h2 {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .modal .sub {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
-    .modal .form-group {
-      margin-bottom: 16px;
-    }
-    .modal label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #aaa;
-      margin-bottom: 6px;
-    }
-    .modal input, .modal textarea {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      color: white;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .modal input:focus, .modal textarea:focus {
-      border-color: #7c3aed;
-    }
-    .modal textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .modal .btn { width: 100%; justify-content: center; }
-    .modal .close-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-      border: none;
-      color: #888;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .modal .close-btn:hover { background: rgba(255,255,255,0.12); }
-    .modal .success-msg {
-      text-align: center;
-      padding: 20px 0;
-    }
-    .modal .success-msg .icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: rgba(16,185,129,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-    }
-    .modal .success-msg h3 {
-      color: white;
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-    .modal .success-msg p {
-      color: #666;
-      font-size: 14px;
-    }
-    .modal .pay-methods {
-      display: flex;
-      gap: 8px;
-      margin: 16px 0;
-    }
-    .modal .pay-methods button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
-      color: #aaa;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-    .modal .pay-methods button:hover {
-      border-color: #7c3aed;
-      color: white;
-      background: rgba(124,58,237,0.1);
-    }
-    .modal .pay-methods button.active {
-      border-color: #7c3aed;
-      color: white;
-      background: rgba(124,58,237,0.15);
-    }
-    .modal .paypal-btn {
-      margin-top: 16px;
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.2);
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
     @media (max-width: 640px) {
-      .hero { padding: 48px 0 32px; }
-      .pricing-grid { grid-template-columns: 1fr; }
+      .hero { padding: 60px 0 32px; }
       .nav-links { display: none; }
-      .modal { padding: 24px; }
     }
   </style>
 </head>
@@ -609,344 +304,94 @@
         WAWE
       </div>
       <div class="nav-links">
-        <a href="#features">Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё</a>
-        <a href="#pricing">РљР»СЋС‡Рё</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">РљРѕРЅС‚Р°РєС‚С‹</a>
-        <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px;">РЎРєР°С‡Р°С‚СЊ</a>
+        <a href="#features">Возможности</a>
+        <a href="#how">Как скачать</a>
+        <a href="#contact">Контакты</a>
+        <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px;">Скачать</a>
       </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
       <div class="hero-badge">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        v1.0.5 вЂ” РїРѕСЃР»РµРґРЅСЏСЏ РІРµСЂСЃРёСЏ
+        v1.0.5 — последняя версия
       </div>
-      <h1>РњСѓР·С‹РєР° Р±РµР·<br><span>РіСЂР°РЅРёС† Рё РїРѕРґРїРёСЃРѕРє</span></h1>
+      <h1>Музыка без<br><span>границ и подписок</span></h1>
       <p>
-        WAWE вЂ” РґРµСЃРєС‚РѕРїРЅС‹Р№ РєР»РёРµРЅС‚ РЇРЅРґРµРєСЃ.РњСѓР·С‹РєРё СЃ СѓРјРЅРѕР№ СЂРµРєРѕРјРµРЅРґР°С‚РµР»СЊРЅРѕР№ СЃРёСЃС‚РµРјРѕР№,
-        РїРѕРёСЃРєРѕРј РїРѕ РјРЅРѕР¶РµСЃС‚РІСѓ РёСЃС‚РѕС‡РЅРёРєРѕРІ Рё РїРѕР»РЅС‹Рј РєР°С‡РµСЃС‚РІРѕРј Р±РµР· РµР¶РµРјРµСЃСЏС‡РЅРѕР№ РїР»Р°С‚С‹.
+        WAWE — десктопный клиент Яндекс.Музыки с умной рекомендательной системой,
+        поиском по множеству источников и полным качеством без ежемесячной платы.
       </p>
       <div class="hero-buttons">
         <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          РЎРєР°С‡Р°С‚СЊ WAWE
+          Скачать WAWE
         </a>
         <a href="#features" class="btn btn-secondary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё
+          Возможности
         </a>
       </div>
     </section>
 
-    <!-- Features -->
     <section id="features" class="features">
       <div class="feature-card">
         <div class="feature-icon" style="background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(168,85,247,0.2));">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
-        <h3>РњСѓР»СЊС‚Рё-РїРѕРёСЃРє</h3>
-        <p>РС‰РµС‚ С‚СЂРµРєРё РІ HitMotop, iTunes, Deezer, SoundCloud, Last.fm вЂ” РѕР±СЉРµРґРёРЅСЏРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚С‹ Рё РІС‹Р±РёСЂР°РµС‚ Р»СѓС‡С€РµРµ РєР°С‡РµСЃС‚РІРѕ.</p>
+        <h3>Мульти-поиск</h3>
+        <p>Ищет треки в HitMotop, iTunes, Deezer, SoundCloud, Last.fm — объединяет результаты и выбирает лучшее качество.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background: linear-gradient(135deg, rgba(236,72,153,0.2), rgba(244,114,182,0.2));">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#f472b6"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
         </div>
-        <h3>РР·Р±СЂР°РЅРЅРѕРµ Рё РїР»РµР№Р»РёСЃС‚С‹</h3>
-        <p>РЎРѕС…СЂР°РЅСЏР№С‚Рµ Р»СЋР±РёРјС‹Рµ С‚СЂРµРєРё, СЃРѕР·РґР°РІР°Р№С‚Рµ РїР»РµР№Р»РёСЃС‚С‹, СѓРїСЂР°РІР»СЏР№С‚Рµ РѕС‡РµСЂРµРґСЊСЋ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ.</p>
+        <h3>Избранное и плейлисты</h3>
+        <p>Сохраняйте любимые треки, создавайте плейлисты, управляйте очередью воспроизведения.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(52,211,153,0.2));">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#34d399"><path d="M21 6h-2v3h-2V6h-2V4h2V1h2v3h2v2zm-10-2v2H7V4h4zm0 4v2H7V8h4zm0 4v2H7v-2h4zm4 4H3v2h12v-2zm0-4H3v2h12v-2z"/></svg>
         </div>
-        <h3>Р‘РµР· РїРѕРґРїРёСЃРєРё</h3>
-        <p>РќРёРєР°РєРѕР№ РµР¶РµРјРµСЃСЏС‡РЅРѕР№ РїР»Р°С‚С‹. РџРѕРєСѓРїР°РµС‚Рµ РєР»СЋС‡ РѕРґРёРЅ СЂР°Р· вЂ” РїРѕР»СЊР·СѓРµС‚РµСЃСЊ РЅР°РІСЃРµРіРґР°.</p>
+        <h3>Без подписки</h3>
+        <p>Никакой ежемесячной платы. Просто скачайте и пользуйтесь.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,146,60,0.2));">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#fbbf24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
         </div>
-        <h3>РњРѕСЏ РІРѕР»РЅР°</h3>
-        <p>РЈРјРЅР°СЏ СЂРµРєРѕРјРµРЅРґР°С‚РµР»СЊРЅР°СЏ СЃРёСЃС‚РµРјР° РїРѕРґР±РёСЂР°РµС‚ С‚СЂРµРєРё РїРѕРґ РІР°С€Рµ РЅР°СЃС‚СЂРѕРµРЅРёРµ вЂ” РІС‹Р±РµСЂРёС‚Рµ mood РёР»Рё РІРєР»СЋС‡РёС‚Рµ Р±РµСЃРєРѕРЅРµС‡РЅС‹Р№ РїРѕС‚РѕРє.</p>
+        <h3>Моя волна</h3>
+        <p>Умная рекомендательная система подбирает треки под ваше настроение — выберите mood или включите бесконечный поток.</p>
       </div>
     </section>
 
-    <!-- How it works -->
-    <section class="how-it-works">
-      <h2>РљР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3>РЎРєР°С‡Р°Р№С‚Рµ РїСЂРёР»РѕР¶РµРЅРёРµ</h3>
-          <p>РЎРєР°С‡Р°Р№С‚Рµ WAWE.exe РёР· СЂР°Р·РґРµР»Р° В«РЎРєР°С‡Р°С‚СЊВ» вЂ” СѓСЃС‚Р°РЅРѕРІРєР° РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ</p>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3>РђРєС‚РёРІРёСЂСѓР№С‚Рµ РґРѕСЃС‚СѓРї</h3>
-          <p>Р’РІРµРґРёС‚Рµ Р±РµСЃРїР»Р°С‚РЅС‹Р№ РёР»Рё РїСЂРµРјРёСѓРј-РєР»СЋС‡, С‡С‚РѕР±С‹ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ РІСЃРµ С„СѓРЅРєС†РёРё</p>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3>РЎР»СѓС€Р°Р№С‚Рµ РјСѓР·С‹РєСѓ</h3>
-          <p>РС‰РёС‚Рµ С‚СЂРµРєРё, СЃРѕР·РґР°РІР°Р№С‚Рµ РїР»РµР№Р»РёСЃС‚С‹, РІРєР»СЋС‡Р°Р№С‚Рµ В«РњРѕСЋ РІРѕР»РЅСѓВ» Рё РЅР°СЃР»Р°Р¶РґР°Р№С‚РµСЃСЊ</p>
-        </div>
+    <section id="how" class="steps">
+      <h2>Как начать</h2>
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Скачайте</h3>
+        <p>Нажмите «Скачать WAWE» — установка не требуется, просто .exe файл</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Запустите</h3>
+        <p>Откройте WAWE.exe — сервер запустится на http://localhost:3001</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Слушайте</h3>
+        <p>Ищите треки, создавайте плейлисты, включайте «Мою волну»</p>
       </div>
     </section>
 
-    <!-- Pricing -->
-    <section id="pricing" class="pricing">
-      <h2>Р’С‹Р±РµСЂРёС‚Рµ СЃРїРѕСЃРѕР± РґРѕСЃС‚СѓРїР°</h2>
-      <p>РћРґРЅРѕСЂР°Р·РѕРІР°СЏ РїР»Р°С‚Р° вЂ” РЅРёРєР°РєРёС… РїРѕРґРїРёСЃРѕРє</p>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <h3>Р‘РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡</h3>
-          <p class="sub">Р’СЃС‚Р°РЅСЊС‚Рµ РІ РѕС‡РµСЂРµРґСЊ</p>
-          <div class="price">0 <span>в‚Ѕ</span></div>
-          <p class="price-desc">РќР°РІСЃРµРіРґР°, Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёР№</p>
-          <ul>
-            <li>РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї Рє WAWE</li>
-            <li>Р’СЃРµ С„СѓРЅРєС†РёРё РїСЂРёР»РѕР¶РµРЅРёСЏ</li>
-            <li>Р‘РµСЃРїР»Р°С‚РЅС‹Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ</li>
-          </ul>
-          <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-secondary">РЎРєР°С‡Р°С‚СЊ WAWE</a>
-        </div>
-        <div class="pricing-card featured">
-          <h3>РџСЂРµРјРёСѓРј РєР»СЋС‡</h3>
-          <p class="sub">РњРіРЅРѕРІРµРЅРЅС‹Р№ РґРѕСЃС‚СѓРї</p>
-          <div class="price">100 <span>в‚Ѕ</span></div>
-          <p class="price-desc">РћРґРёРЅ РїР»Р°С‚С‘Р¶ вЂ” РЅР°РІСЃРµРіРґР°</p>
-          <ul>
-            <li>РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї Рє WAWE</li>
-            <li>Р’СЃРµ С„СѓРЅРєС†РёРё РїСЂРёР»РѕР¶РµРЅРёСЏ</li>
-            <li>Р‘РµСЃРїР»Р°С‚РЅС‹Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ</li>
-            <li>РџСЂРёРѕСЂРёС‚РµС‚РЅР°СЏ РїРѕРґРґРµСЂР¶РєР°</li>
-            <li>РђРєС‚РёРІР°С†РёСЏ Р±РµР· РѕР¶РёРґР°РЅРёСЏ</li>
-          </ul>
-          <button onclick="openModal('paid')" class="btn btn-primary">РљСѓРїРёС‚СЊ СЃРµР№С‡Р°СЃ</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="faq">
-      <h2>Р§Р°СЃС‚Рѕ Р·Р°РґР°РІР°РµРјС‹Рµ РІРѕРїСЂРѕСЃС‹</h2>
-      <div class="faq-item open">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          Р§С‚Рѕ С‚Р°РєРѕРµ WAWE?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-        </div>
-        <div class="faq-answer">WAWE вЂ” СЌС‚Рѕ РґРµСЃРєС‚РѕРїРЅС‹Р№ РєР»РёРµРЅС‚ РЇРЅРґРµРєСЃ.РњСѓР·С‹РєРё. РћРЅ Р°РіСЂРµРіРёСЂСѓРµС‚ С‚СЂРµРєРё РёР· РѕС‚РєСЂС‹С‚С‹С… РёСЃС‚РѕС‡РЅРёРєРѕРІ (HitMotop, iTunes, Deezer, SoundCloud, Last.fm), РїСЂРµРґРѕСЃС‚Р°РІР»СЏСЏ СѓРґРѕР±РЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ СЃ СѓРјРЅРѕР№ СЂРµРєРѕРјРµРЅРґР°С‚РµР»СЊРЅРѕР№ СЃРёСЃС‚РµРјРѕР№ В«РњРѕСЏ РІРѕР»РЅР°В», РїР»РµР№Р»РёСЃС‚Р°РјРё Рё СЌРєРІР°Р»Р°Р№Р·РµСЂРѕРј вЂ” Р±РµР· РµР¶РµРјРµСЃСЏС‡РЅРѕР№ РїРѕРґРїРёСЃРєРё.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          РљР°Рє РїРѕР»СѓС‡РёС‚СЊ Р±РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-        </div>
-        <div class="faq-answer">РќР°Р¶РјРёС‚Рµ В«Р—Р°РїСЂРѕСЃРёС‚СЊ РґРѕСЃС‚СѓРїВ» РІ СЂР°Р·РґРµР»Рµ В«Р‘РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡В», Р·Р°РїРѕР»РЅРёС‚Рµ С„РѕСЂРјСѓ. РњС‹ РґРѕР±Р°РІРёРј РІР°СЃ РІ Р»РёСЃС‚ РѕР¶РёРґР°РЅРёСЏ Рё РѕС‚РїСЂР°РІРёРј РєР»СЋС‡ РЅР° СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕС‡С‚Сѓ РІ РїРѕСЂСЏРґРєРµ РѕС‡РµСЂРµРґРё.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          РљР°Рє РєСѓРїРёС‚СЊ РїСЂРµРјРёСѓРј-РєР»СЋС‡?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-        </div>
-        <div class="faq-answer">РќР°Р¶РјРёС‚Рµ В«РљСѓРїРёС‚СЊ СЃРµР№С‡Р°СЃВ» РІ СЂР°Р·РґРµР»Рµ В«РџСЂРµРјРёСѓРј РєР»СЋС‡В», РІС‹Р±РµСЂРёС‚Рµ СѓРґРѕР±РЅС‹Р№ СЃРїРѕСЃРѕР± РѕРїР»Р°С‚С‹ Рё СЃРѕРІРµСЂС€РёС‚Рµ РїР»Р°С‚С‘Р¶. РљР»СЋС‡ РїСЂРёРґС‘С‚ РЅР° РІР°С€Сѓ РїРѕС‡С‚Сѓ РјРіРЅРѕРІРµРЅРЅРѕ РїРѕСЃР»Рµ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ РѕРїР»Р°С‚С‹.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          РЎРєРѕР»СЊРєРѕ РґРµР№СЃС‚РІСѓРµС‚ РєР»СЋС‡?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-        </div>
-        <div class="faq-answer">РљР»СЋС‡ РґРµР№СЃС‚РІСѓРµС‚ Р±РµСЃСЃСЂРѕС‡РЅРѕ. Р’С‹ РїРѕРєСѓРїР°РµС‚Рµ РґРѕСЃС‚СѓРї РѕРґРёРЅ СЂР°Р· Рё РїРѕР»СЊР·СѓРµС‚РµСЃСЊ РїСЂРёР»РѕР¶РµРЅРёРµРј РЅР°РІСЃРµРіРґР°. Р’СЃРµ РѕР±РЅРѕРІР»РµРЅРёСЏ С‚Р°РєР¶Рµ Р±РµСЃРїР»Р°С‚РЅС‹.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          РњРѕР¶РЅРѕ Р»Рё РїРµСЂРµРЅРµСЃС‚Рё РєР»СЋС‡ РЅР° РґСЂСѓРіРѕР№ РєРѕРјРїСЊСЋС‚РµСЂ?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-        </div>
-        <div class="faq-answer">Р”Р°, РєР»СЋС‡ РјРѕР¶РЅРѕ РѕС‚РІСЏР·Р°С‚СЊ РѕС‚ СЃС‚Р°СЂРѕРіРѕ СѓСЃС‚СЂРѕР№СЃС‚РІР° Рё Р°РєС‚РёРІРёСЂРѕРІР°С‚СЊ РЅР° РЅРѕРІРѕРј. Р”Р»СЏ СЌС‚РѕРіРѕ РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ С„СѓРЅРєС†РёРµР№ В«РћС‚РІСЏР·Р°С‚СЊ РєР»СЋС‡В» РІ РїСЂРёР»РѕР¶РµРЅРёРё.</div>
-      </div>
-    </section>
-
-    <!-- Contact -->
     <section id="contact" class="contact">
-      <h2>РћСЃС‚Р°Р»РёСЃСЊ РІРѕРїСЂРѕСЃС‹?</h2>
-      <p>РќР°РїРёС€РёС‚Рµ РЅР°Рј вЂ” РјС‹ РІСЃРµРіРґР° РЅР° СЃРІСЏР·Рё</p>
+      <h2>Остались вопросы?</h2>
+      <p>Напишите нам — мы всегда на связи</p>
       <a href="mailto:olehmudruk@yandex.by">olehmudruk@yandex.by</a>
     </section>
 
     <footer>
-      <p>&copy; 2026 WAWE. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹. РЎРґРµР»Р°РЅРѕ СЃ вќ¤пёЏ РґР»СЏ Р»СЋР±РёС‚РµР»РµР№ РјСѓР·С‹РєРё.</p>
+      <p>&copy; 2026 WAWE. Все права защищены.</p>
     </footer>
   </div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal" style="position: relative;">
-      <button class="close-btn" onclick="closeModal()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-
-      <!-- Free form -->
-      <div id="modalFree">
-        <h2>Р—Р°РїСЂРѕСЃРёС‚СЊ Р±РµСЃРїР»Р°С‚РЅС‹Р№ РєР»СЋС‡</h2>
-        <p class="sub">Р’СЃС‚Р°РЅСЊС‚Рµ РІ РѕС‡РµСЂРµРґСЊ РЅР° РїРѕР»СѓС‡РµРЅРёРµ Р±РµСЃРїР»Р°С‚РЅРѕРіРѕ РєР»СЋС‡Р° Р°РєС‚РёРІР°С†РёРё</p>
-        <div class="form-group">
-          <label for="freeName">Р’Р°С€Рµ РёРјСЏ</label>
-          <input type="text" id="freeName" placeholder="РљР°Рє Рє РІР°Рј РѕР±СЂР°С‰Р°С‚СЊСЃСЏ" required>
-        </div>
-        <div class="form-group">
-          <label for="freeEmail">Email</label>
-          <input type="email" id="freeEmail" placeholder="example@mail.com" required>
-        </div>
-        <div class="form-group">
-          <label for="freeComment">РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅРѕ)</label>
-          <textarea id="freeComment" placeholder="Р Р°СЃСЃРєР°Р¶РёС‚Рµ Рѕ СЃРµР±Рµ..."></textarea>
-        </div>
-        <button onclick="submitFreeRequest()" class="btn btn-secondary">РћС‚РїСЂР°РІРёС‚СЊ Р·Р°СЏРІРєСѓ</button>
-      </div>
-
-      <!-- Paid form -->
-      <div id="modalPaid" style="display: none;">
-        <h2>РљСѓРїРёС‚СЊ РїСЂРµРјРёСѓРј-РєР»СЋС‡</h2>
-        <p class="sub">РњРіРЅРѕРІРµРЅРЅР°СЏ Р°РєС‚РёРІР°С†РёСЏ РїРѕСЃР»Рµ РѕРїР»Р°С‚С‹</p>
-        <div style="text-align: center; margin-bottom: 16px;">
-          <span style="font-size: 36px; font-weight: 900; color: white;">100</span>
-          <span style="font-size: 16px; color: #666;"> в‚Ѕ</span>
-        </div>
-        <div class="form-group">
-          <label for="paidEmail">Email РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РєР»СЋС‡Р°</label>
-          <input type="email" id="paidEmail" placeholder="example@mail.com" required>
-        </div>
-        <div id="paidSuccess" style="display: none;">
-          <div class="success-msg">
-            <div class="icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <h3>РЎРїР°СЃРёР±Рѕ Р·Р° РїРѕРєСѓРїРєСѓ!</h3>
-            <p>РљР»СЋС‡ Р±СѓРґРµС‚ РѕС‚РїСЂР°РІР»РµРЅ РЅР° СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕС‡С‚Сѓ РІ Р±Р»РёР¶Р°Р№С€РµРµ РІСЂРµРјСЏ.</p>
-          </div>
-        </div>
-        <div id="paidForm">
-          <div class="form-group">
-            <label>РЎРїРѕСЃРѕР± РѕРїР»Р°С‚С‹</label>
-            <div class="pay-methods">
-              <button class="active" onclick="selectPayMethod(this, 'card')">РљР°СЂС‚Р°</button>
-              <button onclick="selectPayMethod(this, 'sbp')">РЎР‘Рџ</button>
-              <button onclick="selectPayMethod(this, 'usdt')">USDT</button>
-            </div>
-          </div>
-          <button onclick="submitPaid()" class="btn btn-primary">РћРїР»Р°С‚РёС‚СЊ 100 в‚Ѕ</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function toggleFaq(el) {
-      el.parentElement.classList.toggle('open');
-    }
-
-    function openModal(type) {
-      document.getElementById('modal').classList.add('open');
-      document.getElementById('modalFree').style.display = type === 'free' ? 'block' : 'none';
-      document.getElementById('modalPaid').style.display = type === 'paid' ? 'block' : 'none';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').classList.remove('open');
-    }
-
-    document.getElementById('modal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    function selectPayMethod(el) {
-      document.querySelectorAll('.pay-methods button').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
-    }
-
-    function submitFreeRequest() {
-      const name = document.getElementById('freeName').value.trim();
-      const email = document.getElementById('freeEmail').value.trim();
-      if (!name || !email) {
-        alert('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, Р·Р°РїРѕР»РЅРёС‚Рµ РёРјСЏ Рё email.');
-        return;
-      }
-
-      const btn = document.querySelector('#modalFree .btn');
-      btn.textContent = 'РћС‚РїСЂР°РІР»СЏРµРј...';
-      btn.disabled = true;
-
-      fetch('https://formsubmit.co/ajax/olehmudruk@yandex.by', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: 'WAWE вЂ” Р—Р°РїСЂРѕСЃ Р±РµСЃРїР»Р°С‚РЅРѕРіРѕ РєР»СЋС‡Р°',
-          name: name,
-          email: email,
-          comment: document.getElementById('freeComment').value.trim(),
-          type: 'free'
-        })
-      })
-      .then(r => r.json())
-      .then(() => {
-        document.querySelector('#modalFree').innerHTML = `
-          <div class="success-msg">
-            <div class="icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
-            <h3>Р—Р°СЏРІРєР° РїСЂРёРЅСЏС‚Р°!</h3>
-            <p>РњС‹ СЃРІСЏР¶РµРјСЃСЏ СЃ РІР°РјРё, РєРѕРіРґР° РїРѕРґРѕР№РґС‘С‚ РѕС‡РµСЂРµРґСЊ. РћР±С‹С‡РЅРѕ РѕР¶РёРґР°РЅРёРµ СЃРѕСЃС‚Р°РІР»СЏРµС‚ 1вЂ“3 РґРЅСЏ.</p>
-            <button onclick="closeModal()" class="btn btn-secondary" style="margin-top: 20px;">Р—Р°РєСЂС‹С‚СЊ</button>
-          </div>
-        `;
-      })
-      .catch(() => {
-        btn.textContent = 'РћС‚РїСЂР°РІРёС‚СЊ Р·Р°СЏРІРєСѓ';
-        btn.disabled = false;
-        alert('РћС€РёР±РєР° РѕС‚РїСЂР°РІРєРё. РџРѕРїСЂРѕР±СѓР№С‚Рµ РїРѕР·Р¶Рµ РёР»Рё РЅР°РїРёС€РёС‚Рµ РЅР°Рј РЅР° РїРѕС‡С‚Сѓ.');
-      });
-    }
-
-    function submitPaid() {
-      const email = document.getElementById('paidEmail').value.trim();
-      if (!email) {
-        alert('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, СѓРєР°Р¶РёС‚Рµ email РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РєР»СЋС‡Р°.');
-        return;
-      }
-
-      const btn = document.querySelector('#paidForm .btn');
-      btn.textContent = 'РћР±СЂР°Р±РѕС‚РєР°...';
-      btn.disabled = true;
-
-      const method = document.querySelector('.pay-methods .active');
-      const methodName = method ? method.textContent : 'card';
-
-      fetch('https://formsubmit.co/ajax/olehmudruk@yandex.by', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: 'WAWE вЂ” РџРѕРєСѓРїРєР° РїСЂРµРјРёСѓРј-РєР»СЋС‡Р°',
-          email: email,
-          method: methodName,
-          type: 'paid'
-        })
-      })
-      .then(r => r.json())
-      .then(() => {
-        document.getElementById('paidForm').style.display = 'none';
-        document.getElementById('paidSuccess').style.display = 'block';
-      })
-      .catch(() => {
-        btn.textContent = 'РћРїР»Р°С‚РёС‚СЊ 100 в‚Ѕ';
-        btn.disabled = false;
-        alert('РћС€РёР±РєР° РѕР±СЂР°Р±РѕС‚РєРё. РџРѕРїСЂРѕР±СѓР№С‚Рµ РїРѕР·Р¶Рµ РёР»Рё РЅР°РїРёС€РёС‚Рµ РЅР°Рј РЅР° РїРѕС‡С‚Сѓ.');
-      });
-    }
-
-  </script>
 </body>
 </html>
