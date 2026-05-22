@@ -8,57 +8,69 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #0a0a0f;
+      background: #07070d;
       color: #e0e0e0;
       overflow-x: hidden;
     }
 
-    .bg-glow {
+    /* ── Animated background ── */
+    .bg {
       position: fixed;
       inset: 0;
       z-index: -1;
       overflow: hidden;
     }
-    .bg-glow::before {
+    .bg::before {
       content: '';
       position: absolute;
-      top: -20%;
-      left: -10%;
-      width: 60%;
-      height: 60%;
-      background: radial-gradient(ellipse, rgba(139,92,246,0.15) 0%, transparent 60%);
-      animation: float 12s ease-in-out infinite;
+      top: -30%;
+      left: -15%;
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 65%);
+      animation: floatA 14s ease-in-out infinite;
     }
-    .bg-glow::after {
+    .bg::after {
       content: '';
       position: absolute;
-      bottom: -20%;
-      right: -10%;
-      width: 60%;
-      height: 60%;
-      background: radial-gradient(ellipse, rgba(236,72,153,0.12) 0%, transparent 60%);
-      animation: float 12s ease-in-out infinite reverse;
+      bottom: -25%;
+      right: -15%;
+      width: 65%;
+      height: 65%;
+      background: radial-gradient(ellipse, rgba(236,72,153,0.10) 0%, transparent 65%);
+      animation: floatB 16s ease-in-out infinite;
     }
-    @keyframes float {
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    @keyframes floatA {
       0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -30px) scale(1.1); }
-      66% { transform: translate(-20px, 20px) scale(0.9); }
+      33% { transform: translate(40px, -40px) scale(1.1); }
+      66% { transform: translate(-30px, 30px) scale(0.9); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-40px, 40px) scale(1.05); }
+      66% { transform: translate(30px, -30px) scale(0.95); }
     }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
+    /* ── Nav ── */
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
     .logo {
       display: flex;
@@ -79,12 +91,7 @@
       align-items: center;
       justify-content: center;
     }
-    .logo-icon svg {
-      width: 20px;
-      height: 20px;
-      color: white;
-      -webkit-text-fill-color: white;
-    }
+    .logo-icon svg { width: 20px; height: 20px; color: white; -webkit-text-fill-color: white; }
     .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-links a {
       color: #888;
@@ -95,9 +102,16 @@
     }
     .nav-links a:hover { color: #c084fc; }
 
+    /* ── Hero ── */
     .hero {
       text-align: center;
       padding: 100px 0 60px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .hero-badge {
       display: inline-flex;
@@ -113,23 +127,29 @@
       margin-bottom: 24px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0); }
+      50% { box-shadow: 0 0 20px 0 rgba(139,92,246,0.15); }
     }
     .hero h1 {
-      font-size: clamp(36px, 6vw, 64px);
+      font-size: clamp(40px, 7vw, 72px);
       font-weight: 900;
-      line-height: 1.1;
+      line-height: 1.08;
       margin-bottom: 20px;
     }
-    .hero h1 span {
-      background: linear-gradient(135deg, #a78bfa, #f472b6);
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, #a78bfa 0%, #f472b6 50%, #fb923c 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .hero p {
       font-size: 18px;
       color: #666;
-      max-width: 600px;
-      margin: 0 auto 32px;
+      max-width: 560px;
+      margin: 0 auto 40px;
       line-height: 1.7;
     }
     .hero-buttons {
@@ -139,6 +159,7 @@
       flex-wrap: wrap;
     }
 
+    /* ── Buttons ── */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -151,6 +172,8 @@
       transition: all 0.25s;
       cursor: pointer;
       border: none;
+      position: relative;
+      overflow: hidden;
     }
     .btn-primary {
       background: linear-gradient(135deg, #7c3aed, #ec4899);
@@ -159,141 +182,220 @@
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(124,58,237,0.4);
+      box-shadow: 0 12px 36px rgba(124,58,237,0.45);
     }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+    .btn-primary:hover::after { transform: translateX(100%); }
     .btn-secondary {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.05);
       color: #ccc;
       border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(4px);
     }
     .btn-secondary:hover {
       background: rgba(255,255,255,0.1);
       transform: translateY(-2px);
     }
 
+    /* ── Section titles ── */
+    .section-title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 48px;
+    }
+    .section-title span {
+      background: linear-gradient(135deg, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Features ── */
     .features {
+      padding: 80px 0;
+    }
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      padding: 60px 0;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
     }
     .feature-card {
-      padding: 28px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: all 0.3s;
+      padding: 28px 24px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
     }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .feature-card:hover::before { opacity: 1; }
     .feature-card:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(139,92,246,0.2);
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(139,92,246,0.15);
       transform: translateY(-4px);
     }
     .feature-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .feature-card h3 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      color: white;
-      margin-bottom: 8px;
+      color: #fff;
+      margin-bottom: 6px;
     }
     .feature-card p {
-      font-size: 14px;
+      font-size: 13px;
       color: #666;
       line-height: 1.6;
     }
 
-    .steps {
+    /* ── Steps ── */
+    .steps-section {
+      padding: 60px 0 80px;
+    }
+    .steps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 32px;
-      padding: 60px 0;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .step-card {
       text-align: center;
+      padding: 32px 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.35s;
     }
-    .steps h2 {
-      grid-column: 1 / -1;
-      font-size: 32px;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-    .step {
-      text-align: center;
-    }
+    .step-card:hover { transform: translateY(-4px); border-color: rgba(139,92,246,0.2); }
     .step-num {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(236,72,153,0.2));
-      border: 1px solid rgba(139,92,246,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 16px;
       font-size: 18px;
       font-weight: 800;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(236,72,153,0.2));
+      border: 1px solid rgba(139,92,246,0.2);
       color: #a78bfa;
     }
-    .step h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 6px;
+    .step-card h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .step-card p { font-size: 13px; color: #666; line-height: 1.6; }
+
+    /* ── Download CTA ── */
+    .cta {
+      text-align: center;
+      padding: 80px 0;
+      border-top: 1px solid rgba(255,255,255,0.04);
     }
-    .step p {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.6;
+    .cta h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+    .cta p { color: #666; margin-bottom: 32px; font-size: 16px; }
+    .cta .btn { font-size: 17px; padding: 16px 40px; }
+    .version-info {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #444;
     }
 
+    /* ── FAQ ── */
+    .faq {
+      padding: 60px 0;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 18px 0;
+    }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #ddd;
+      font-size: 14px;
+      user-select: none;
+    }
+    .faq-question:hover { color: #fff; }
+    .faq-answer {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+      display: none;
+    }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-chevron { transition: transform 0.2s; width: 18px; height: 18px; color: #555; }
+
+    /* ── Contact ── */
     .contact {
       text-align: center;
-      padding: 60px 0 80px;
+      padding: 60px 0;
     }
-    .contact h2 {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-    .contact p {
-      color: #666;
-      margin-bottom: 24px;
-    }
+    .contact h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .contact p { color: #666; font-size: 14px; margin-bottom: 16px; }
     .contact a {
       color: #a78bfa;
       text-decoration: none;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
     }
     .contact a:hover { color: #c084fc; }
 
     footer {
-      border-top: 1px solid rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(255,255,255,0.04);
       padding: 24px 0;
       text-align: center;
       font-size: 13px;
       color: #444;
     }
 
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
 
     @media (max-width: 640px) {
       .hero { padding: 60px 0 32px; }
       .nav-links { display: none; }
+      .steps-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="bg-glow"></div>
+  <div class="bg">
+    <div class="bg-grid"></div>
+  </div>
 
   <div class="container">
     <nav>
@@ -305,8 +407,8 @@
       </div>
       <div class="nav-links">
         <a href="#features">Возможности</a>
-        <a href="#how">Как скачать</a>
-        <a href="#contact">Контакты</a>
+        <a href="#how">Как начать</a>
+        <a href="#faq">FAQ</a>
         <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px;">Скачать</a>
       </div>
     </nav>
@@ -316,10 +418,13 @@
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         v1.0.5 — последняя версия
       </div>
-      <h1>Музыка без<br><span>границ и подписок</span></h1>
+      <h1>
+        Музыка без<br>
+        <span class="gradient">границ и подписок</span>
+      </h1>
       <p>
-        WAWE — десктопный клиент Яндекс.Музыки с умной рекомендательной системой,
-        поиском по множеству источников и полным качеством без ежемесячной платы.
+        Десктопный клиент Яндекс.Музыки с поиском по множеству источников,
+        умной рекомендательной системой и полным качеством — бесплатно.
       </p>
       <div class="hero-buttons">
         <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary">
@@ -334,58 +439,105 @@
     </section>
 
     <section id="features" class="features">
-      <div class="feature-card">
-        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(168,85,247,0.2));">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      <h2 class="section-title">Что <span>умеет</span> WAWE</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(168,85,247,0.2));">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          </div>
+          <h3>Мульти-поиск</h3>
+          <p>Ищет треки в HitMotop, iTunes, Deezer, SoundCloud, Last.fm — объединяет результаты и выбирает лучшее качество.</p>
         </div>
-        <h3>Мульти-поиск</h3>
-        <p>Ищет треки в HitMotop, iTunes, Deezer, SoundCloud, Last.fm — объединяет результаты и выбирает лучшее качество.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(236,72,153,0.2), rgba(244,114,182,0.2));">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#f472b6"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(236,72,153,0.2), rgba(244,114,182,0.2));">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#f472b6"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+          <h3>Избранное</h3>
+          <p>Сохраняйте любимые треки, создавайте плейлисты, управляйте очередью воспроизведения.</p>
         </div>
-        <h3>Избранное и плейлисты</h3>
-        <p>Сохраняйте любимые треки, создавайте плейлисты, управляйте очередью воспроизведения.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(52,211,153,0.2));">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#34d399"><path d="M21 6h-2v3h-2V6h-2V4h2V1h2v3h2v2zm-10-2v2H7V4h4zm0 4v2H7V8h4zm0 4v2H7v-2h4zm4 4H3v2h12v-2zm0-4H3v2h12v-2z"/></svg>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(52,211,153,0.2));">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#34d399"><path d="M21 6h-2v3h-2V6h-2V4h2V1h2v3h2v2zm-10-2v2H7V4h4zm0 4v2H7V8h4zm0 4v2H7v-2h4zm4 4H3v2h12v-2zm0-4H3v2h12v-2z"/></svg>
+          </div>
+          <h3>Без подписки</h3>
+          <p>Никакой ежемесячной платы. Просто скачали, запустили и слушаете.</p>
         </div>
-        <h3>Без подписки</h3>
-        <p>Никакой ежемесячной платы. Просто скачайте и пользуйтесь.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,146,60,0.2));">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#fbbf24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,146,60,0.2));">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fbbf24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          </div>
+          <h3>Моя волна</h3>
+          <p>Умные рекомендации подбирают треки под ваше настроение — бесконечный поток музыки.</p>
         </div>
-        <h3>Моя волна</h3>
-        <p>Умная рекомендательная система подбирает треки под ваше настроение — выберите mood или включите бесконечный поток.</p>
       </div>
     </section>
 
-    <section id="how" class="steps">
-      <h2>Как начать</h2>
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Скачайте</h3>
-        <p>Нажмите «Скачать WAWE» — установка не требуется, просто .exe файл</p>
+    <section id="how" class="steps-section">
+      <h2 class="section-title">Как <span>начать</span></h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h3>Скачайте</h3>
+          <p>Нажмите кнопку «Скачать WAWE» — это единственный файл, установка не требуется</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h3>Запустите</h3>
+          <p>Откройте WAWE.exe — сервер запустится, и браузер откроется автоматически</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3>Слушайте</h3>
+          <p>Ищите треки, создавайте плейлисты, включайте «Мою волну» и наслаждайтесь</p>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Запустите</h3>
-        <p>Откройте WAWE.exe — сервер запустится на http://localhost:3001</p>
+    </section>
+
+    <section class="cta">
+      <h2>Готовы попробовать?</h2>
+      <p>Скачайте WAWE прямо сейчас — это бесплатно и не требует установки</p>
+      <a href="https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Скачать WAWE
+      </a>
+      <div class="version-info">v1.0.5 — Windows, 89 MB</div>
+    </section>
+
+    <section id="faq" class="faq">
+      <h2 class="section-title">Частые <span>вопросы</span></h2>
+      <div class="faq-item open">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Что такое WAWE?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">WAWE — это десктопный клиент Яндекс.Музыки. Он агрегирует треки из открытых источников (HitMotop, iTunes, Deezer, SoundCloud, Last.fm) и предоставляет удобный интерфейс для поиска и прослушивания — без ежемесячной подписки.</div>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Слушайте</h3>
-        <p>Ищите треки, создавайте плейлисты, включайте «Мою волну»</p>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Это бесплатно?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">Да, WAWE полностью бесплатен. Никаких подписок, скрытых платежей или ограничений по времени.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Нужна ли установка?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">Нет. Просто скачайте WAWE.exe и запустите — это портативная программа, которая не требует установки.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Как это работает?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="faq-answer">После запуска WAWE.exe поднимает локальный сервер на http://localhost:3001 и автоматически открывает браузер. Через веб-интерфейс вы можете искать треки, создавать плейлисты и слушать музыку.</div>
       </div>
     </section>
 
     <section id="contact" class="contact">
       <h2>Остались вопросы?</h2>
-      <p>Напишите нам — мы всегда на связи</p>
+      <p>Напишите нам — мы на связи</p>
       <a href="mailto:olehmudruk@yandex.by">olehmudruk@yandex.by</a>
     </section>
 
@@ -393,5 +545,11 @@
       <p>&copy; 2026 WAWE. Все права защищены.</p>
     </footer>
   </div>
+
+  <script>
+    function toggleFaq(el) {
+      el.parentElement.classList.toggle('open');
+    }
+  </script>
 </body>
 </html>
