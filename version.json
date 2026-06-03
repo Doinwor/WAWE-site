@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0.c",
-  "downloadUrl": "https://github.com/Doinwor/WAWE-site/releases/download/v1.1.0.c/WAWE-v1.1.0.c.exe",
-  "notes": "Моя волна временно не работает — идёт переработка алгоритма"
+  "version": "1.1.0.d",
+  "downloadUrl": "https://github.com/Doinwor/WAWE-site/releases/download/v1.1.0.d/WAWE-v1.1.0.d.exe",
+  "notes": "• Исправлен SPA fallback для OAuth callback\n• Добавлен embeddedFile для работы встроенных ассетов"
 }
