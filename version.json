@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
-  "downloadUrl": "https://github.com/Doinwor/WAWE/releases/download/v1.1.0.a/WAWE.exe",
-  "notes": "Моя волна — временная заглушка, исправления ESLint/TS, убрано консольное окно"
+  "version": "1.1.0.b",
+  "downloadUrl": "https://github.com/Doinwor/WAWE/releases/download/v1.1.0.b/WAWE.exe",
+  "notes": "Моя волна временно не работает — идёт переработка алгоритма"
 }
