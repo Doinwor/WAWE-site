@@ -1,5 +1,5 @@
 {
-  "version": "1.0.5",
-  "downloadUrl": "https://github.com/Doinwor/WAWE-site/releases/download/v1.0.5/wawe.exe",
-  "notes": "• Полностью исправлен процесс обновления: bat + taskkill + скрытый запуск + авто-перезагрузка"
+  "version": "1.1.0",
+  "downloadUrl": "https://github.com/Doinwor/WAWE/releases/download/v1.1.0.a/WAWE.exe",
+  "notes": "Моя волна — временная заглушка, исправления ESLint/TS, убрано консольное окно"
 }
